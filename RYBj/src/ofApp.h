@@ -5,6 +5,7 @@
 #include "sketches/j1_2.h"
 #include "sketches/j1_3.h"
 #include "ofxGui.h"
+#include "ofxOpenCv.h"
 
 class ofApp : public ofBaseApp{
 
@@ -28,10 +29,16 @@ class ofApp : public ofBaseApp{
 
 		ofEvent<void> sceneChange;
 		ofParameter<float> sceneDuration = 120.;
+		ofParameter<float> labelBuffer = 30.;
 	private:
 		std::vector<std::unique_ptr<IDailySketch> > sketches;
 		float sceneTime;
 		size_t selectedScene;
+		string sketchName;
+		ofFbo sketch;
+		ofPixels pixels;
+		ofTrueTypeFont font;
 
+		ofColor dominantColor(ofPixels& pixels);
 		
 };

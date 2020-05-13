@@ -8,6 +8,10 @@ class j1_2 : public IDailySketch {
 	size_t curveCount = 1;
 	size_t curvePoints = 24;
 
+	const string name() const {
+		return "RYBj1.2";
+	}
+
 	void setup() {
 		ofEnableAlphaBlending();
 		//ofEnableBlendMode(OF_BLENDMODE_MULTIPLY);
