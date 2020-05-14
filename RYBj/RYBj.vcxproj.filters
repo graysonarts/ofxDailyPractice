@@ -244,9 +244,6 @@
     <ClInclude Include="src\sketches\j1_2.h">
       <Filter>src\sketches</Filter>
     </ClInclude>
-    <ClInclude Include="src\sketches\j1_3.h">
-      <Filter>src\sketches</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\of_v0.11.0_vs2017_release\addons\ofxGui\src\ofxBaseGui.h">
       <Filter>addons\ofxGui\src</Filter>
     </ClInclude>
@@ -1162,6 +1159,15 @@
     <ClInclude Include="..\..\of_v0.11.0_vs2017_release\addons\ofxOpenCv\libs\opencv\include\opencv2\world.hpp">
       <Filter>addons\ofxOpenCv\libs\opencv\include\opencv2</Filter>
     </ClInclude>
+    <ClInclude Include="src\sketches\shame.h">
+      <Filter>src\sketches</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sketches\j1_4.h">
+      <Filter>src\sketches</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sketches\sketches.h">
+      <Filter>src\sketches</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="bin\data\shader.vert">
@@ -1178,27 +1184,63 @@
   </ItemGroup>
   <ItemGroup>
     <Font Include="bin\data\fonts\Montserrat-Medium.ttf">
-      <Filter>resources</Filter>
+      <Filter>resources\fonts</Filter>
     </Font>
-    <Font Include="bin\data\fonts\Montserrat-Black.ttf" />
-    <Font Include="bin\data\fonts\Montserrat-BlackItalic.ttf" />
-    <Font Include="bin\data\fonts\Montserrat-Bold.ttf" />
-    <Font Include="bin\data\fonts\Montserrat-BoldItalic.ttf" />
-    <Font Include="bin\data\fonts\Montserrat-ExtraBold.ttf" />
-    <Font Include="bin\data\fonts\Montserrat-ExtraBoldItalic.ttf" />
-    <Font Include="bin\data\fonts\Montserrat-ExtraLight.ttf" />
-    <Font Include="bin\data\fonts\Montserrat-ExtraLightItalic.ttf" />
-    <Font Include="bin\data\fonts\Montserrat-Italic.ttf" />
-    <Font Include="bin\data\fonts\Montserrat-Light.ttf" />
-    <Font Include="bin\data\fonts\Montserrat-LightItalic.ttf" />
-    <Font Include="bin\data\fonts\Montserrat-MediumItalic.ttf" />
-    <Font Include="bin\data\fonts\Montserrat-Regular.ttf" />
-    <Font Include="bin\data\fonts\Montserrat-SemiBold.ttf" />
-    <Font Include="bin\data\fonts\Montserrat-SemiBoldItalic.ttf" />
-    <Font Include="bin\data\fonts\Montserrat-Thin.ttf" />
-    <Font Include="bin\data\fonts\Montserrat-ThinItalic.ttf" />
+    <Font Include="bin\data\fonts\Montserrat-Black.ttf">
+      <Filter>resources\fonts</Filter>
+    </Font>
+    <Font Include="bin\data\fonts\Montserrat-BlackItalic.ttf">
+      <Filter>resources\fonts</Filter>
+    </Font>
+    <Font Include="bin\data\fonts\Montserrat-Bold.ttf">
+      <Filter>resources\fonts</Filter>
+    </Font>
+    <Font Include="bin\data\fonts\Montserrat-BoldItalic.ttf">
+      <Filter>resources\fonts</Filter>
+    </Font>
+    <Font Include="bin\data\fonts\Montserrat-ExtraBold.ttf">
+      <Filter>resources\fonts</Filter>
+    </Font>
+    <Font Include="bin\data\fonts\Montserrat-ExtraBoldItalic.ttf">
+      <Filter>resources\fonts</Filter>
+    </Font>
+    <Font Include="bin\data\fonts\Montserrat-ExtraLight.ttf">
+      <Filter>resources\fonts</Filter>
+    </Font>
+    <Font Include="bin\data\fonts\Montserrat-ExtraLightItalic.ttf">
+      <Filter>resources\fonts</Filter>
+    </Font>
+    <Font Include="bin\data\fonts\Montserrat-Italic.ttf">
+      <Filter>resources\fonts</Filter>
+    </Font>
+    <Font Include="bin\data\fonts\Montserrat-Light.ttf">
+      <Filter>resources\fonts</Filter>
+    </Font>
+    <Font Include="bin\data\fonts\Montserrat-LightItalic.ttf">
+      <Filter>resources\fonts</Filter>
+    </Font>
+    <Font Include="bin\data\fonts\Montserrat-MediumItalic.ttf">
+      <Filter>resources\fonts</Filter>
+    </Font>
+    <Font Include="bin\data\fonts\Montserrat-Regular.ttf">
+      <Filter>resources\fonts</Filter>
+    </Font>
+    <Font Include="bin\data\fonts\Montserrat-SemiBold.ttf">
+      <Filter>resources\fonts</Filter>
+    </Font>
+    <Font Include="bin\data\fonts\Montserrat-SemiBoldItalic.ttf">
+      <Filter>resources\fonts</Filter>
+    </Font>
+    <Font Include="bin\data\fonts\Montserrat-Thin.ttf">
+      <Filter>resources\fonts</Filter>
+    </Font>
+    <Font Include="bin\data\fonts\Montserrat-ThinItalic.ttf">
+      <Filter>resources\fonts</Filter>
+    </Font>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="bin\data\settings.xml" />
+    <Xml Include="bin\data\settings.xml">
+      <Filter>resources</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

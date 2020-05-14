@@ -1,21 +1,30 @@
 #include "ofApp.h"
-#include "sketches/j1_2.h"
-#include "sketches/j1_3.h"
+#include "sketches/sketches.h"
+#include "sketches/shame.h"
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+	ofEnableSmoothing();
+
+	ofParameterGroup labels;
+	labels.setName("Label Controls");
+	ofParameterGroup durations;
+	durations.setName("Durations");
+
 	gui.setup();
-	gui.add(labelBuffer.set("Label Bottom", 30., 0., ofGetHeight()));
-	gui.add(lineBuffer.set("Line Spacing", 0., -100., 100.));
-
-	gui.loadFromFile("settings.xml");
-
+	labels.add(labelBuffer.set("Label Bottom", 30., 0., ofGetHeight()));
+	labels.add(lineBuffer.set("Line Spacing", 0., -100., 100.));
+	durations.add(sceneDuration.set("Normal Scene", 120., 15., 3600.));
+	durations.add(shortSceneDuration.set("Short Scene", 30., 15., 3600.));
+	gui.add(durations);
+	gui.add(labels);
 
 	sketch.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
 	light.load("fonts/Montserrat-Light.ttf", 24);
 	semibold.load("fonts/Montserrat-SemiBold.ttf", 8);
 	selectedScene = -1;
-	sketches.push_back(std::make_unique<j1_3>(this));
+	sketches.push_back(std::make_unique<j1_4>(this));
+	sketches.push_back(std::make_unique<shame>(this, "j1_3", ofColor::aliceBlue, ofColor::darkBlue));
 	sketches.push_back(std::make_unique<j1_2>(this));
 
 
@@ -23,13 +32,15 @@ void ofApp::setup(){
 		sketch->setup();
 	}
 
+	gui.loadFromFile("settings.xml");
 	ofAddListener(sceneChange, this, &ofApp::onSceneChange);
 	onSceneChange();
 }
 
 //--------------------------------------------------------------
 void ofApp::update() {
-	if (ofGetElapsedTimef() - sceneTime > sceneDuration) {
+	float duration = sketches.at(selectedScene)->shortDuration() ? shortSceneDuration : sceneDuration;
+	if (ofGetElapsedTimef() - sceneTime > duration) {
 		ofNotifyEvent(sceneChange);
 	}
 
@@ -73,8 +84,9 @@ void ofApp::keyPressed(int key){
 	case ' ':
 		ofNotifyEvent(sceneChange);
 		break;
-	case OF_KEY_BACKSPACE:
+	case OF_KEY_TAB:
 		showGui = !showGui;
+		break;
 	}
 	
 }

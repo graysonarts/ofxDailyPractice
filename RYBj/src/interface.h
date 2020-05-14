@@ -13,7 +13,8 @@ public:
 	virtual void update() {}
 	virtual void draw() {}
 	virtual void reset() {}
+	virtual bool shortDuration() { return false;  }
 
 protected:
-	const ofApp* parent;
+	ofApp* parent;
 };

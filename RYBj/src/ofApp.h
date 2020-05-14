@@ -27,6 +27,7 @@ class ofApp : public ofBaseApp{
 
 		ofEvent<void> sceneChange;
 		ofParameter<float> sceneDuration = 120.;
+		ofParameter<float> shortSceneDuration = 30.;
 		ofParameter<float> labelBuffer = 30.;
 		ofParameter<float> lineBuffer = 0.;
 
