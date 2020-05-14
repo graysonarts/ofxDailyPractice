@@ -9,7 +9,7 @@ class j1_2 : public IDailySketch {
 	size_t curvePoints = 24;
 
 	const string name() const {
-		return "RYBj1.2";
+		return "j1.2";
 	}
 
 	void setup() {

@@ -30,6 +30,7 @@ class ofApp : public ofBaseApp{
 		ofEvent<void> sceneChange;
 		ofParameter<float> sceneDuration = 120.;
 		ofParameter<float> labelBuffer = 30.;
+		ofParameter<float> lineBuffer = 0.;
 	private:
 		std::vector<std::unique_ptr<IDailySketch> > sketches;
 		float sceneTime;
@@ -37,8 +38,10 @@ class ofApp : public ofBaseApp{
 		string sketchName;
 		ofFbo sketch;
 		ofPixels pixels;
-		ofTrueTypeFont font;
+		ofTrueTypeFont light, semibold;
 
 		ofColor dominantColor(ofPixels& pixels);
+
+		ofxPanel gui;
 		
 };

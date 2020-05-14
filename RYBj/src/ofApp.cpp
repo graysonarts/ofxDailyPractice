@@ -2,8 +2,14 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+	gui.setup();
+	gui.add(labelBuffer.set("Label Bottom", 30., 0., ofGetHeight()));
+	gui.add(lineBuffer.set("Line Spacing", 0., -100., 100.));
+
+
 	sketch.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
-	font.load("Montserrat-Medium.ttf", 36);
+	light.load("fonts/Montserrat-Light.ttf", 36);
+	semibold.load("fonts/Montserrat-SemiBold.ttf", 10);
 	selectedScene = -1;
 	sketches.push_back(std::make_unique<j1_2>());
 	//sketches.push_back(std::make_unique<j1_3>());
@@ -37,10 +43,16 @@ void ofApp::draw(){
 	sketch.readToPixels(pixels);
 
 	ofSetColor(dominantColor(pixels));
-	ofRectangle fontBox = font.getStringBoundingBox(sketchName, 0, 0);
+	ofRectangle fontBox = light.getStringBoundingBox(sketchName, 0, 0);
 	fontBox.x = ofGetWidth()/2. - (fontBox.width / 2.0);
 	fontBox.y = ofGetHeight() - fontBox.height - labelBuffer;
-	font.drawString(sketchName, fontBox.x, fontBox.y);
+	light.drawString(sketchName, fontBox.x, fontBox.y);
+
+	fontBox = semibold.getStringBoundingBox("CYCLE RYB", 0, fontBox.y + fontBox.height + lineBuffer);
+	fontBox.x = ofGetWidth() / 2. - (fontBox.width / 2.0);
+	semibold.drawString("CYCLE RYB", fontBox.x, fontBox.y);
+
+	gui.draw();
 }
 
 ofColor ofApp::dominantColor(ofPixels& p) {
@@ -54,7 +66,7 @@ void ofApp::onSceneChange() {
 	sceneTime = ofGetElapsedTimef();
 	selectedScene = (selectedScene + 1) % sketches.size();
 	sketches.at(selectedScene)->reset();
-	sketchName = sketches.at(selectedScene)->name();
+	sketchName = "sk. " + sketches.at(selectedScene)->name();
 }
 
 //--------------------------------------------------------------

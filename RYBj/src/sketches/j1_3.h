@@ -5,7 +5,7 @@
 
 class j1_3 : public IDailySketch {
 	const string name() const {
-		return "RYBj1.2";
+		return "j1.3";
 	}
 
 	void draw() {
