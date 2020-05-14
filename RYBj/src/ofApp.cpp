@@ -6,10 +6,12 @@ void ofApp::setup(){
 	gui.add(labelBuffer.set("Label Bottom", 30., 0., ofGetHeight()));
 	gui.add(lineBuffer.set("Line Spacing", 0., -100., 100.));
 
+	gui.loadFromFile("settings.xml");
+
 
 	sketch.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
-	light.load("fonts/Montserrat-Light.ttf", 36);
-	semibold.load("fonts/Montserrat-SemiBold.ttf", 10);
+	light.load("fonts/Montserrat-Light.ttf", 24);
+	semibold.load("fonts/Montserrat-SemiBold.ttf", 8);
 	selectedScene = -1;
 	sketches.push_back(std::make_unique<j1_2>());
 	//sketches.push_back(std::make_unique<j1_3>());
@@ -56,6 +58,34 @@ void ofApp::draw(){
 }
 
 ofColor ofApp::dominantColor(ofPixels& p) {
+
+	return ofColor::peru;
+
+	// Prep the image
+	ofxCvColorImage image;
+	image.allocate(p.getWidth(), p.getHeight());
+	image.setFromPixels(p);
+	image.resize(108, 108);
+	//image.blur(15);
+
+	// Calculate KMean(3)
+	cv::Mat data = cv::cvarrToMat(image.getCvImage(), true); // Copies data
+	data = data.reshape(1, data.rows * data.cols);
+	data.convertTo(data, CV_32FC3);
+	cv::Mat labels, centers;
+
+	try {
+		cv::kmeans(data, 3, labels, cv::TermCriteria(CV_TERMCRIT_ITER, 10, 1.0), 1, cv::KMEANS_PP_CENTERS, centers);
+	}
+	catch (cv::Exception e) {
+		ofLog(OF_LOG_ERROR) << e.what();
+		return ofColor::chartreuse;
+	}
+
+	centers.forEach<float>([](float& p, const int *position) {
+		ofLog() << p << ": " << position[0] << ", " << position[1];
+	});
+
 	// Kmean cluster to 3
 	// Pick dominant color
 	// Calculate contrasting color for text

@@ -224,10 +224,11 @@
     </Filter>
     <Filter Include="resources">
       <UniqueIdentifier>{3be1637b-a61d-4f75-89fa-7fd5f3674adf}</UniqueIdentifier>
+      <Extensions>xml;vert;frag;rc</Extensions>
     </Filter>
     <Filter Include="resources\fonts">
       <UniqueIdentifier>{0d36a132-9cf0-40db-8806-ef3e97ae1417}</UniqueIdentifier>
-      <Extensions>.ttf</Extensions>
+      <Extensions>ttf</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1196,5 +1197,8 @@
     <Font Include="bin\data\fonts\Montserrat-SemiBoldItalic.ttf" />
     <Font Include="bin\data\fonts\Montserrat-Thin.ttf" />
     <Font Include="bin\data\fonts\Montserrat-ThinItalic.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="bin\data\settings.xml" />
   </ItemGroup>
 </Project>

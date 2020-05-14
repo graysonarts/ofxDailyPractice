@@ -547,6 +547,9 @@
     <None Include="bin\data\shader.vert" />
     <None Include="bin\data\shadow.frag" />
   </ItemGroup>
+  <ItemGroup>
+    <Xml Include="bin\data\settings.xml" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ProjectExtensions>
     <VisualStudio>
