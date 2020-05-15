@@ -43,4 +43,7 @@ class ofApp : public ofBaseApp{
 		ofxPanel gui;
 		bool showGui = false;
 		
+#ifdef NDI_OUTPUT
+		NdiOut *ndi;
+#endif
 };

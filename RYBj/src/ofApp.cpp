@@ -3,6 +3,9 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+#ifdef NDI_OUTPUT
+	ndi = new NdiOut(ofGetWidth(), ofGetHeight());
+#endif
 	ofEnableSmoothing();
 
 	ofParameterGroup labels;
@@ -51,6 +54,9 @@ void ofApp::draw(){
 		sketches.at(selectedScene)->draw();
 	sketch.end();
 
+#ifdef NDI_OUTPUT
+	ndi->getFrame(sketch);
+#endif
 	sketch.draw(0, 0);
 
 	ofSetColor(labelColor);
@@ -69,6 +75,7 @@ void ofApp::draw(){
 void ofApp::onSceneChange() {
 	sceneTime = ofGetElapsedTimef();
 	selectedScene = (selectedScene + 1) % sketches.size();
+
 	sketches.at(selectedScene)->reset();
 	sketchName = "sk. " + sketches.at(selectedScene)->name();
 	labelColor = sketches.at(selectedScene)->labelColor();
