@@ -7,7 +7,11 @@
 #include "shame.h"
 
 #define SKETCH(sketch) retval.push_back(std::make_unique<sketch>(parent))
-#define SHAME(name, background, label) retval.push_back(std::make_unique<shame>(parent, #name, background, label))
+#define SHAME(name, background, label) { \
+ string _name = #name; \
+_name.replace(2, 1, "."); \
+ retval.push_back(std::make_unique<shame>(parent, _name, background, label)); \
+}
 
 std::vector<std::unique_ptr<IDailySketch> > getSketches(ofApp* parent) {
 	std::vector<std::unique_ptr<IDailySketch> > retval;

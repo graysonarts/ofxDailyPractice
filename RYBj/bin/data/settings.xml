@@ -6,8 +6,8 @@
 		<Radius>250</Radius>
 	</j1_4>
 	<Durations>
-		<Normal_Scene>124.745</Normal_Scene>
-		<Short_Scene>15</Short_Scene>
+		<Normal_Scene>1</Normal_Scene>
+		<Short_Scene>1</Short_Scene>
 	</Durations>
 	<Label_Controls>
 		<Label_Bottom>30</Label_Bottom>

@@ -21,8 +21,13 @@ protected:
 
 #define SKETCH_BEGIN(sketch, color) \
 class sketch : public IDailySketch { \
+	string _name; \
 	public: \
-		const string name() const { return #sketch ; } \
+		sketch(ofApp* parent) : IDailySketch(parent) { \
+			_name = #sketch; \
+			_name.replace(2, 1, "."); \
+		} \
+		const string name() const { return _name ; } \
         const ofColor labelColor() const { return color; }
 
 #define SKETCH_END };

@@ -12,9 +12,6 @@ SKETCH_BEGIN(j1_5, ofColor::cornflowerBlue)
 	ofParameterGroup controls;
 	ofParameter<float> radius;
 
-	j1_5(ofApp* parent) : IDailySketch(parent) { }
-
-
 	void setup() {
 		ofEnableAlphaBlending();
 		ofEnableBlendMode(OF_BLENDMODE_MULTIPLY);
