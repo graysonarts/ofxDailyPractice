@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<group>
+	<Label_Bottom>97.2</Label_Bottom>
+	<Line_Spacing>-6</Line_Spacing>
+	<j1_4>
+		<Radius>250</Radius>
+	</j1_4>
+	<Durations>
+		<Normal_Scene>124.745</Normal_Scene>
+		<Short_Scene>15</Short_Scene>
+	</Durations>
+	<Label_Controls>
+		<Label_Bottom>30</Label_Bottom>
+		<Line_Spacing>0</Line_Spacing>
+	</Label_Controls>
+</group>
