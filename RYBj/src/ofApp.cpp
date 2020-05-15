@@ -52,6 +52,16 @@ void ofApp::draw(){
 	ofSetColor(255);
 	sketch.begin();
 		sketches.at(selectedScene)->draw();
+
+		ofSetColor(labelColor);
+		ofRectangle fontBox = light.getStringBoundingBox(sketchName, 0, 0);
+		fontBox.x = ofGetWidth() / 2. - (fontBox.width / 2.0);
+		fontBox.y = ofGetHeight() - fontBox.height - labelBuffer;
+		light.drawString(sketchName, fontBox.x, fontBox.y);
+
+		fontBox = semibold.getStringBoundingBox("CYCLE RYB", 0, fontBox.y + fontBox.height + lineBuffer);
+		fontBox.x = ofGetWidth() / 2. - (fontBox.width / 2.0);
+		semibold.drawString("CYCLE RYB", fontBox.x, fontBox.y);
 	sketch.end();
 
 #ifdef NDI_OUTPUT
@@ -59,15 +69,7 @@ void ofApp::draw(){
 #endif
 	sketch.draw(0, 0);
 
-	ofSetColor(labelColor);
-	ofRectangle fontBox = light.getStringBoundingBox(sketchName, 0, 0);
-	fontBox.x = ofGetWidth()/2. - (fontBox.width / 2.0);
-	fontBox.y = ofGetHeight() - fontBox.height - labelBuffer;
-	light.drawString(sketchName, fontBox.x, fontBox.y);
 
-	fontBox = semibold.getStringBoundingBox("CYCLE RYB", 0, fontBox.y + fontBox.height + lineBuffer);
-	fontBox.x = ofGetWidth() / 2. - (fontBox.width / 2.0);
-	semibold.drawString("CYCLE RYB", fontBox.x, fontBox.y);
 
 	if (showGui) gui.draw();
 }
