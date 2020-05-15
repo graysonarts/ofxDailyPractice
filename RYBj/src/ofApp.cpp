@@ -1,6 +1,5 @@
 #include "ofApp.h"
 #include "sketches/sketches.h"
-#include "sketches/shame.h"
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -23,10 +22,7 @@ void ofApp::setup(){
 	light.load("fonts/Montserrat-Light.ttf", 24);
 	semibold.load("fonts/Montserrat-SemiBold.ttf", 8);
 	selectedScene = -1;
-	sketches.push_back(std::make_unique<j1_4>(this));
-	sketches.push_back(std::make_unique<shame>(this, "j1_3", ofColor::aliceBlue, ofColor::darkBlue));
-	sketches.push_back(std::make_unique<j1_2>(this));
-
+	sketches = getSketches(this);
 
 	for (const auto &sketch : sketches) {
 		sketch->setup();

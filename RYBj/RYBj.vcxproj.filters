@@ -1168,6 +1168,9 @@
     <ClInclude Include="src\sketches\sketches.h">
       <Filter>src\sketches</Filter>
     </ClInclude>
+    <ClInclude Include="src\sketches\j1_5.h">
+      <Filter>src\sketches</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="bin\data\shader.vert">
@@ -1176,6 +1179,7 @@
     <None Include="bin\data\shadow.frag">
       <Filter>resources</Filter>
     </None>
+    <None Include="cpp.hint" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc">

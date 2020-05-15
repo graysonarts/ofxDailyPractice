@@ -18,3 +18,11 @@ public:
 protected:
 	ofApp* parent;
 };
+
+#define SKETCH_BEGIN(sketch, color) \
+class sketch : public IDailySketch { \
+	public: \
+		const string name() const { return #sketch ; } \
+        const ofColor labelColor() const { return color; }
+
+#define SKETCH_END };
