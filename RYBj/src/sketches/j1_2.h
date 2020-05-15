@@ -4,21 +4,10 @@
 #include "interface.h"
 #include "ofApp.h"
 
-class j1_2 : public IDailySketch {
-public:
+SKETCH_BEGIN(j1_2, ofColor::peru)
 	std::vector<std::vector<glm::vec2> > curves;
 	size_t curveCount = 1;
 	size_t curvePoints = 24;
-
-	j1_2(ofApp* parent) : IDailySketch(parent) { }
-
-	const string name() const {
-		return "j1.2";
-	}
-
-	const ofColor labelColor() const {
-		return ofColor::peru;
-	}
 
 	void setup() {
 		ofEnableAlphaBlending();
@@ -86,4 +75,4 @@ private:
 
 		return retval;
 	}
-};
+SKETCH_END
