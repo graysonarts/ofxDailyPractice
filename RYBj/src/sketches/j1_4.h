@@ -6,23 +6,12 @@
 #include "ofApp.h"
 #include "ofxGui.h"
 
-class j1_4 : public IDailySketch {
-public:
+SKETCH_BEGIN(j1_4, ofColor::cornflowerBlue)
 	std::vector<std::vector<glm::vec2> > curves;
 	size_t curveCount = 5;
 	size_t curvePoints = 16;
 	ofParameterGroup controls;
 	ofParameter<float> radius;
-
-	j1_4(ofApp* parent) : IDailySketch(parent) { }
-
-	const string name() const {
-		return "j1.4";
-	}
-
-	const ofColor labelColor() const {
-		return ofColor::cornflowerBlue;
-	}
 
 	void setup() {
 		ofEnableAlphaBlending();
@@ -108,4 +97,4 @@ private:
 
 		return retval;
 	}
-};
+SKETCH_END
