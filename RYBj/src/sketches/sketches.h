@@ -16,6 +16,7 @@ _name.replace(2, 1, "."); \
 std::vector<std::unique_ptr<IDailySketch> > getSketches(ofApp* parent) {
 	std::vector<std::unique_ptr<IDailySketch> > retval;
 
+	SKETCH(j1_5);
 	SKETCH(j1_4);
 	SHAME(j1_3, ofColor::aliceBlue, ofColor::darkBlue);
 	SKETCH(j1_2);

@@ -553,6 +553,33 @@
       <AdditionalIncludeDirectories>$(OF_ROOT)\libs\openFrameworksCompiled\project\vs</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Xml Include="bin\data\settings.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\data\shader.vert" />
+    <None Include="bin\data\shadow.frag" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="bin\data\fonts\Montserrat-Black.ttf" />
+    <Font Include="bin\data\fonts\Montserrat-BlackItalic.ttf" />
+    <Font Include="bin\data\fonts\Montserrat-Bold.ttf" />
+    <Font Include="bin\data\fonts\Montserrat-BoldItalic.ttf" />
+    <Font Include="bin\data\fonts\Montserrat-ExtraBold.ttf" />
+    <Font Include="bin\data\fonts\Montserrat-ExtraBoldItalic.ttf" />
+    <Font Include="bin\data\fonts\Montserrat-ExtraLight.ttf" />
+    <Font Include="bin\data\fonts\Montserrat-ExtraLightItalic.ttf" />
+    <Font Include="bin\data\fonts\Montserrat-Italic.ttf" />
+    <Font Include="bin\data\fonts\Montserrat-Light.ttf" />
+    <Font Include="bin\data\fonts\Montserrat-LightItalic.ttf" />
+    <Font Include="bin\data\fonts\Montserrat-Medium.ttf" />
+    <Font Include="bin\data\fonts\Montserrat-MediumItalic.ttf" />
+    <Font Include="bin\data\fonts\Montserrat-Regular.ttf" />
+    <Font Include="bin\data\fonts\Montserrat-SemiBold.ttf" />
+    <Font Include="bin\data\fonts\Montserrat-SemiBoldItalic.ttf" />
+    <Font Include="bin\data\fonts\Montserrat-Thin.ttf" />
+    <Font Include="bin\data\fonts\Montserrat-ThinItalic.ttf" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ProjectExtensions>
     <VisualStudio>

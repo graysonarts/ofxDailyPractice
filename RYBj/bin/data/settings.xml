@@ -6,11 +6,17 @@
 		<Radius>250</Radius>
 	</j1_4>
 	<Durations>
-		<Normal_Scene>1</Normal_Scene>
+		<Normal_Scene>120</Normal_Scene>
 		<Short_Scene>1</Short_Scene>
 	</Durations>
 	<Label_Controls>
 		<Label_Bottom>30</Label_Bottom>
 		<Line_Spacing>0</Line_Spacing>
 	</Label_Controls>
+	<j1_5>
+		<minRadius>163.878</minRadius>
+		<maxRadius>163.265</maxRadius>
+		<buffer>20</buffer>
+		<width>4.03061</width>
+	</j1_5>
 </group>
