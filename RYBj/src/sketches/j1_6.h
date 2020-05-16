@@ -5,7 +5,7 @@
 #include "ofApp.h"
 #include "ofxGui.h"
 
-SKETCH_BEGIN(j1_6, ofColor::darkorange)
+SKETCH_BEGIN(j1_6, ofColor::darkOrchid)
 
 ofParameter<int> circleCount = 36;
 ofParameter<float> buffer = 25;
