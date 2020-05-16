@@ -582,6 +582,9 @@
     <Font Include="bin\data\fonts\Montserrat-Thin.ttf" />
     <Font Include="bin\data\fonts\Montserrat-ThinItalic.ttf" />
   </ItemGroup>
+  <ItemGroup>
+    <Media Include="bin\data\wavs\j1_6.wav" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ProjectExtensions>
     <VisualStudio>

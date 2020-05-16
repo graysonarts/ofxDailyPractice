@@ -12,10 +12,15 @@ ofParameter<float> buffer = 25;
 ofParameter<float> minAxisLength = 10;
 std::vector<float> circlePos; // x is x position, y is minor axis length (because it's an ellipse
 ofShader chroma;
+ofSoundPlayer sound;
+float lastPlayTime = 0;
+
+void setup() {
+	sound.load("wavs/j1_6.wav");
+	sound.setMultiPlay(true);
+}
 
 void reset() {
-	ofLog() << "reset shader";
-	chroma.load("shader.vert", "shaders/chromatic.frag");
 	circlePos.clear();
 	ofEnableAlphaBlending();
 	ofEnableBlendMode(OF_BLENDMODE_SCREEN);
@@ -26,9 +31,17 @@ void reset() {
 	}
 }
 
-//ofShader* shader() { return &chroma;  }
+void stop() {
+	ofLog() << "Stopping sound";
+	sound.stop();
+}
+
 
 void draw() {
+	float time = ofGetElapsedTimef();
+	if (time - lastPlayTime > 2) {
+		sound.play();
+	}
 	ofEnableSmoothing();
 	ofPushMatrix();
 	ofTranslate(ofGetWidth() / 2., ofGetHeight() / 2.);

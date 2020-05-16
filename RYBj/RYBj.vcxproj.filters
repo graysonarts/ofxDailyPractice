@@ -262,6 +262,10 @@
       <UniqueIdentifier>{4e83454b-1338-4452-a0a1-fae727a0d8b3}</UniqueIdentifier>
       <Extensions>ttf</Extensions>
     </Filter>
+    <Filter Include="data\wavs">
+      <UniqueIdentifier>{f638c8a9-cd8b-4288-a2e3-69c6e6146c1e}</UniqueIdentifier>
+      <Extensions>wav</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ofApp.h">
@@ -1346,5 +1350,10 @@
     <Font Include="bin\data\fonts\Montserrat-ThinItalic.ttf">
       <Filter>data\fonts</Filter>
     </Font>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="bin\data\wavs\j1_6.wav">
+      <Filter>data\wavs</Filter>
+    </Media>
   </ItemGroup>
 </Project>

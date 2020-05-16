@@ -87,6 +87,8 @@ void ofApp::draw(){
 
 void ofApp::onSceneChange() {
 	sceneTime = ofGetElapsedTimef();
+	if (selectedScene >= 0 && selectedScene < sketches.size()) sketches.at(selectedScene)->stop();
+
 	selectedScene = (selectedScene + 1) % sketches.size();
 
 	sketches.at(selectedScene)->reset();
