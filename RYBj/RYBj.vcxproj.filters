@@ -1266,12 +1266,18 @@
     <ClInclude Include="..\..\of_v0.11.0_vs2017_release\addons\ofxOpenCv\libs\opencv\include\opencv2\world.hpp">
       <Filter>addons\ofxOpenCv\libs\opencv\include\opencv2</Filter>
     </ClInclude>
+    <ClInclude Include="src\sketches\j1_6.h">
+      <Filter>src\sketches</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="bin\data\shader.vert">
       <Filter>data</Filter>
     </None>
     <None Include="bin\data\shadow.frag">
+      <Filter>data</Filter>
+    </None>
+    <None Include="bin\data\shaders\chromatic.frag">
       <Filter>data</Filter>
     </None>
   </ItemGroup>

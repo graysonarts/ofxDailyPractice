@@ -14,6 +14,7 @@ public:
 	virtual void draw() {}
 	virtual void reset() {}
 	virtual bool shortDuration() { return false;  }
+	virtual ofShader* shader() { return nullptr;  }
 
 protected:
 	ofApp* parent;
@@ -32,7 +33,7 @@ class sketch : public IDailySketch { \
 
 #define SKETCH_END };
 
-#define NDI_OUTPUT
+//#define NDI_OUTPUT
 
 #ifdef NDI_OUTPUT
 #include "ofxNDI.h"

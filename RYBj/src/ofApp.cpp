@@ -48,9 +48,16 @@ void ofApp::update() {
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-	ofClear(0);
+	ofBackground(0);
 	ofSetColor(255);
+	ofShader* shader = sketches.at(selectedScene)->shader();
+
+
 	sketch.begin();
+		if (shader != nullptr) {
+			shader->begin();
+			shader->setUniform2f("resolution", ofGetWidth(), ofGetHeight());
+		}
 		sketches.at(selectedScene)->draw();
 
 		ofSetColor(labelColor);
@@ -62,11 +69,15 @@ void ofApp::draw(){
 		fontBox = semibold.getStringBoundingBox("CYCLE RYB", 0, fontBox.y + fontBox.height + lineBuffer);
 		fontBox.x = ofGetWidth() / 2. - (fontBox.width / 2.0);
 		semibold.drawString("CYCLE RYB", fontBox.x, fontBox.y);
+
+		if (shader != nullptr) shader->end();
 	sketch.end();
+
 
 #ifdef NDI_OUTPUT
 	ndi->getFrame(sketch);
 #endif
+
 	sketch.draw(0, 0);
 
 
@@ -91,6 +102,9 @@ void ofApp::keyPressed(int key){
 		break;
 	case OF_KEY_TAB:
 		showGui = !showGui;
+		break;
+	case 'r':
+		sketches.at(selectedScene)->reset();
 		break;
 	}
 	
