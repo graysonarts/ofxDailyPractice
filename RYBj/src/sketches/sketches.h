@@ -5,6 +5,7 @@
 #include "j1_4.h"
 #include "j1_5.h"
 #include "j1_6.h"
+/// INCLUDE
 #include "shame.h"
 
 #define SKETCH(sketch) retval.push_back(std::make_unique<sketch>(parent))
@@ -17,6 +18,7 @@ _name.replace(2, 1, "."); \
 std::vector<std::unique_ptr<IDailySketch> > getSketches(ofApp* parent) {
 	std::vector<std::unique_ptr<IDailySketch> > retval;
 
+	/// SKETCH LIST
 	SKETCH(j1_6);
 	SKETCH(j1_5);
 	SKETCH(j1_4);
