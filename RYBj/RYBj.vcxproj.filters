@@ -1273,6 +1273,9 @@
     <ClInclude Include="src\sketches\j1_6.h">
       <Filter>src\sketches</Filter>
     </ClInclude>
+    <ClInclude Include="src\sketches\j1_7.h">
+      <Filter>src\sketches</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="bin\data\shader.vert">

@@ -213,6 +213,7 @@
     <ClInclude Include="src\sketches\j1_4.h" />
     <ClInclude Include="src\sketches\j1_5.h" />
     <ClInclude Include="src\sketches\j1_6.h" />
+    <ClInclude Include="src\sketches\j1_7.h" />
     <ClInclude Include="src\sketches\shame.h" />
     <ClInclude Include="src\sketches\sketches.h" />
     <ClInclude Include="..\..\of_v0.11.0_vs2017_release\addons\ofxGui\src\ofxBaseGui.h" />

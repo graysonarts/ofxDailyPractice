@@ -16,6 +16,9 @@ public:
 	virtual void stop() {}
 	virtual bool shortDuration() { return false;  }
 	virtual ofShader* shader() { return nullptr;  }
+	virtual void onButton(float x, float y) { }
+	virtual void onMove(float x, float y) { }
+	virtual bool isInteractive() { return false; }
 
 protected:
 	ofApp* parent;
@@ -34,7 +37,7 @@ class sketch : public IDailySketch { \
 
 #define SKETCH_END };
 
-#define NDI_OUTPUT
+//#define NDI_OUTPUT
 
 #ifdef NDI_OUTPUT
 #include "ofxNDI.h"

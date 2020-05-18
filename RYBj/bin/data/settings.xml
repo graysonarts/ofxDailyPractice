@@ -6,7 +6,7 @@
 		<Radius>250</Radius>
 	</j1_4>
 	<Durations>
-		<Normal_Scene>120</Normal_Scene>
+		<Normal_Scene>1200</Normal_Scene>
 		<Short_Scene>1</Short_Scene>
 	</Durations>
 	<Label_Controls>

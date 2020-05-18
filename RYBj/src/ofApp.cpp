@@ -53,7 +53,6 @@ void ofApp::draw(){
 	ofShader* shader = sketches.at(selectedScene)->shader();
 
 
-	sketch.begin();
 		if (shader != nullptr) {
 			shader->begin();
 			shader->setUniform2f("resolution", ofGetWidth(), ofGetHeight());
@@ -66,21 +65,19 @@ void ofApp::draw(){
 		fontBox.y = ofGetHeight() - fontBox.height - labelBuffer;
 		light.drawString(sketchName, fontBox.x, fontBox.y);
 
-		fontBox = semibold.getStringBoundingBox("CYCLE RYB", 0, fontBox.y + fontBox.height + lineBuffer);
+		string cycle = "CYCLE RYB";
+		if (sketches.at(selectedScene)->isInteractive()) {
+			cycle += " (interactive)";
+		}
+		fontBox = semibold.getStringBoundingBox(cycle, 0, fontBox.y + fontBox.height + lineBuffer);
 		fontBox.x = ofGetWidth() / 2. - (fontBox.width / 2.0);
-		semibold.drawString("CYCLE RYB", fontBox.x, fontBox.y);
+		semibold.drawString(cycle, fontBox.x, fontBox.y);
 
 		if (shader != nullptr) shader->end();
-	sketch.end();
-
 
 #ifdef NDI_OUTPUT
 	ndi->getFrame(sketch);
 #endif
-
-	sketch.draw(0, 0);
-
-
 
 	if (showGui) gui.draw();
 }
@@ -119,6 +116,7 @@ void ofApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
+	sketches.at(selectedScene)->onMove(x, y);
 
 }
 
@@ -129,7 +127,7 @@ void ofApp::mouseDragged(int x, int y, int button){
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
-
+	sketches.at(selectedScene)->onButton(x, y);
 }
 
 //--------------------------------------------------------------
