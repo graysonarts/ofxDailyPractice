@@ -8,7 +8,7 @@
 SKETCH_BEGIN(j2_1, ofColor::darkSlateGray)
 std::vector<std::vector<glm::vec2> > curves;
 size_t curveCount = 5;
-size_t curvePoints = 16 * 4;
+size_t curvePoints = 16;
 ofParameterGroup controls;
 ofParameter<float> radius;
 
@@ -41,49 +41,28 @@ void draw() {
 	ofSetColor(ofColor::darkGray, 64.);
 	ofSetLineWidth(3.);
 
-	ofDrawCircle(0, 0, radius);
-	ofPushMatrix();
-	for (int i = 0; i < 360; i += 36) {
-		ofSetColor(ofColor::red);
-		parent->semibold.drawString(std::to_string(i), radius, 0);
-		ofRotateDeg(36);
-	}
-	ofPopMatrix();
-
-	float lastx = 0., lasty = 0.;
+	//ofDrawCircle(0, 0, radius);
+	//ofPushMatrix();
+	//for (int i = 0; i < 360; i += 36) {
+	//	ofSetColor(ofColor::red);
+	//	parent->semibold.drawString(std::to_string(i), radius, 0);
+	//	ofRotateDeg(36);
+	//}
+	//ofPopMatrix();
 
 	for (const auto& curve : curves) {
 		float x = 0, y = 0, angle = 0, r = 0; int index = 0;
 		ofBeginShape();
 		for (const auto& pt : curve) {
 
-			angle += pt.y;
-			r += pt.x;
+			x = pt.x;
+			y = pt.y;
 
-			if (r > radius) {
-				r = radius;
-			}
-			if (r < -radius) {
-				r = -radius;
-			}
-
-			x = r * glm::cos(angle);
-			y = r * glm::sin(angle);
-
-			if (lastx == 0 && lasty == 0) {
-				ofSetColor(ofColor::darkMagenta);
-				ofDrawCircle(x, y, 5.);
-			}
 
 			ofSetColor(ofColor::darkGray, 64.);
 			ofCurveVertex(x, y);
-			if (lastx != 0 && lasty != 0) {
-				ofSetColor(ofColor::red);
-				//ofDrawLine(lastx, lasty, x, y);
-			}
+			ofDrawCircle(x, y, 5.);
 
-			lastx = x;
-			lasty = y;
 			//parent->semibold.drawString(std::to_string(index++), x, y);
 
 		}
@@ -96,11 +75,10 @@ void draw() {
 //void update() {
 //	for (auto& curve : curves) {
 //		for (auto& pt : curve) {
-//			float noise = ofNoise(ofGetElapsedTimeMillis() / 239875.) * 2 * PI;
-//			pt.x += sin(noise);
+//			float noise = ofNoise(ofGetElapsedTimeMillis() / pt.y / 2300.);
 //			pt.y += cos(noise) / 5000.0;
-//			//pt.x -= (ofNoise(sin(ofGetElapsedTimeMillis() / 83405.)) - 0.5) * 10.;
-//			//pt.y += (ofNoise(cos(ofGetElapsedTimeMillis() / 1423.)) - 0.5) * PI / 2.;
+//			pt.x -= (ofNoise(sin(ofGetElapsedTimeMillis() / 83405.)) - 0.5) * 10.;
+//			pt.y += (ofNoise(cos(ofGetElapsedTimeMillis() / 1423.)) - 0.5) * PI / 2.;
 //		}
 //	}
 //}
@@ -108,36 +86,25 @@ void draw() {
 private:
 	std::vector<glm::vec2> randomized_curve(int index) {
 		std::vector<glm::vec2> retval;
-		//float radiusMax = max(ofGetWidth() / 4. * (float)index / curvePoints, ofGetHeight() / 4. * (float)index / curvePoints);
-		float radiusMax = radius;
+		ofLog() << "randomized curve";
 
-		//glm::vec2 start = { radiusMax * ofRandomf(), ofRandom(2 * PI) };
-		glm::vec2 start = { radiusMax, 0 };
 
-		retval.push_back(start);
 
-		float accAngle = 0;
-		float accR = radiusMax;
-		for (int i = 0; i < curvePoints - 2; i++) {
+		for (int i = 0; i < curvePoints; i++) {
 			float degs = 360. / (float)curvePoints;
-			float angle = glm::radians(degs);
-			accAngle += degs;
+			float angle = glm::radians(degs)*(float)i;
 
-			float currentRadius = 0;
-			if (accAngle > 180 && accAngle < 270)
-				currentRadius = ofRandom(-radiusMax / 8., 3.);
-			if (accAngle > 270)
-				currentRadius = ofRandom(-3, radiusMax / 8.);
+			float x = radius * glm::cos(angle);
+			float y = radius * glm::sin(angle);
 
-			accR += currentRadius;
-			//float currentRadius = ofRandom(500. * i / curvePoints - 250.);
-			//float angle = ofRandom(0., glm::radians(i * 10.));
-			retval.push_back({ currentRadius, angle });
+			if (angle > PI && angle < 2 * PI) {
+				//y = ofRandom(radius / 4. , -3.);
+				y += 2. * ofRandom(radius, -3.) * -glm::sin(angle);
+			}
 
-			ofLog() << accR << " - " << accAngle;
+			retval.push_back({ x, y });
+			ofLog() << x << "<" << y;
 		}
-
-		retval.push_back(start);
 
 		return retval;
 	}
