@@ -80,6 +80,7 @@ void ofApp::draw(){
 #endif
 
 	if (showGui) gui.draw();
+	ofSaveFrame();
 }
 
 void ofApp::onSceneChange() {

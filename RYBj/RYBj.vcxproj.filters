@@ -1279,7 +1279,12 @@
     <ClInclude Include="src\sketches\j2_1.h">
       <Filter>src\sketches</Filter>
     </ClInclude>
-    <ClInclude Include="src\sketches\j2_2.h" />
+    <ClInclude Include="src\sketches\j2_2.h">
+      <Filter>src\sketches</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sketches\j2_3.h">
+      <Filter>src\sketches</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="bin\data\shader.vert">
