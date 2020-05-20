@@ -42,6 +42,7 @@ class ofApp : public ofBaseApp{
 
 		ofxPanel gui;
 		bool showGui = false;
+		ofImage savedScreen;
 		
 #ifdef NDI_OUTPUT
 		NdiOut *ndi;

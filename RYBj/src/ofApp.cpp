@@ -105,6 +105,9 @@ void ofApp::keyPressed(int key){
 	case 'r':
 		sketches.at(selectedScene)->reset();
 		break;
+	case 's':
+		ofSaveFrame();
+		break;
 	}
 	
 }
