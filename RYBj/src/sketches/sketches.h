@@ -9,7 +9,9 @@
 #include "j2_1.h"
 #include "j2_2.h"
 #include "j2_3.h"
+#include "j2_4.h"
 /// INCLUDE
+
 
 
 
@@ -26,6 +28,7 @@ std::vector<std::unique_ptr<IDailySketch> > getSketches(ofApp* parent) {
 	std::vector<std::unique_ptr<IDailySketch> > retval;
 
 	/// SKETCH LIST
+	SKETCH(j2_4);
 	SKETCH(j2_3);
 	SKETCH(j2_2);
 	SKETCH(j2_1);
