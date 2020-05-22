@@ -23,7 +23,7 @@ public:
 	shame(ofApp* parent, string name, ofColor background, ofColor label) : IDailySketch(parent), m_name(name), m_background(background), m_label(label) { }
 
 	void draw() {
-		ofBackground(m_background);
+		ofClear(m_background);
 		ofSetColor(labelColor());
 		ofRectangle fontBox = parent->light.getStringBoundingBox(SHAME, 0, 0);
 		fontBox.x = ofGetWidth() / 2. - fontBox.width / 2.;

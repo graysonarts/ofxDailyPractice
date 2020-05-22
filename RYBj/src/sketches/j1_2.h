@@ -24,7 +24,7 @@ SKETCH_BEGIN(j1_2, ofColor::peru)
 	void draw() {
 		ofPushMatrix();
 		ofTranslate(ofGetWidth() / 2., ofGetHeight() / 2.);
-			ofBackground(ofColor::lightGray);
+			ofClear(ofColor::lightGray);
 			ofSetColor(ofColor::darkGray, 128.);
 			float x = 0, y = 0;
 			for (const auto &curve : curves) {

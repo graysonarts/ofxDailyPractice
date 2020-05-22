@@ -38,7 +38,7 @@ SKETCH_BEGIN(j1_5, ofColor::cornflowerBlue)
 		ofRotateDeg(ofGetElapsedTimeMillis()/10000.);
 		ofSetLineWidth(lineWidth);
 
-		ofBackground(ofColor::lightGray);
+		ofClear(ofColor::lightGray);
 		ofSetColor(ofColor::darkGray, 64.);
 
 		for (const auto& pt : curves) {

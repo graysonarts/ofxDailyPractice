@@ -25,7 +25,7 @@ ofParameterGroup controls;
 	void draw() {
 		ofPushMatrix();
 		ofTranslate(ofGetWidth() / 2., ofGetHeight() / 2.);
-		ofBackground(ofColor::plum);
+		ofClear(ofColor::plum);
 		ofSetColor(ofColor::floralWhite, 128.);
 		ofDrawCircle(currentPoint, 10.);
 		ofDrawCircle(0, 0, maxRadius);

@@ -37,7 +37,7 @@ void draw() {
 	ofPushMatrix();
 	ofTranslate(ofGetWidth() / 2., ofGetHeight() / 2.);
 
-	ofBackground(ofColor::lightGray);
+	ofClear(ofColor::lightGray);
 	ofSetColor(ofColor::darkGray, 64.);
 	ofSetLineWidth(3.);
 

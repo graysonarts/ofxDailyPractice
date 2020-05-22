@@ -46,8 +46,8 @@ void draw() {
 	ofPushMatrix();
 	ofTranslate(ofGetWidth() / 2., ofGetHeight() / 2.);
 
-	ofBackground(ofColor::ghostWhite);
-	ofBackground(ofColor::darkGray);
+	ofClear(ofColor::ghostWhite);
+	ofClear(ofColor::darkGray);
 
 	for (const auto& circle : circlePos) {
 		ofColor color = ofColor::whiteSmoke;

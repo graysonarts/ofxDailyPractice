@@ -36,7 +36,7 @@ void reset() {
 void draw_explore() {
 	ofPushMatrix();
 	ofTranslate(ofGetWidth() / 2., ofGetHeight() / 2.);
-	ofBackground(ofColor::lightGray);
+	ofClear(ofColor::lightGray);
 	float angle = 0, x = 0, y = 0;
 
 	for (int i = 0; i < 5; i++) {
@@ -59,7 +59,7 @@ void draw() {
 	ofPushMatrix();
 	ofTranslate(ofGetWidth() / 2., ofGetHeight() / 2.);
 
-	ofBackground(ofColor::lightGray);
+	ofClear(ofColor::lightGray);
 	ofSetColor(ofColor::dimGrey, 64.);
 	ofSetLineWidth(3.);
 

@@ -52,7 +52,7 @@ std::vector<glm::vec2> points;
 	void draw() {
 		ofPushMatrix();
 		ofTranslate(ofGetWidth() / 2., ofGetHeight() / 2.);
-		ofBackground(ofColor::black);
+		ofClear(ofColor::black);
 
 		ofSetColor(labelColor());
 		for (int i = 1; i < points.size(); i++) {

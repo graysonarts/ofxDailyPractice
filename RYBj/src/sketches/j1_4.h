@@ -36,7 +36,7 @@ SKETCH_BEGIN(j1_4, ofColor::cornflowerBlue)
 		ofPushMatrix();
 		ofTranslate(ofGetWidth() / 2., ofGetHeight() / 2.);
 
-		ofBackground(ofColor::lightGray);
+		ofClear(ofColor::lightGray);
 		ofSetColor(ofColor::darkGray, 64.);
 
 		for (const auto& curve : curves) {

@@ -34,6 +34,8 @@ void ofApp::setup(){
 	gui.loadFromFile("settings.xml");
 	ofAddListener(sceneChange, this, &ofApp::onSceneChange);
 	onSceneChange();
+	ofClear(0);
+	ofSetBackgroundAuto(false);
 }
 
 //--------------------------------------------------------------
@@ -48,7 +50,6 @@ void ofApp::update() {
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-	ofBackground(0);
 	ofSetColor(255);
 	ofShader* shader = sketches.at(selectedScene)->shader();
 
