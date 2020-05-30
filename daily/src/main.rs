@@ -5,6 +5,8 @@ use chrono::Local;
 use std::io::prelude::*;
 
 mod colors;
+mod vs;
+mod cpp;
 
 use colors::random_color;
 
@@ -30,26 +32,12 @@ fn calculate_project_name() -> Result<String, std::io::Error> {
     Ok(project_name)
 }
 
-fn add_sketch_entries(name: &str, include: &str, macro_line: &str, root: &PathBuf, background: &str, label: &str) -> Result<(), std::io::Error> {
-    let filename = root.join("src/sketches/sketches.h");
-    let data = std::fs::read_to_string(&filename)?;
-    let split1 : Vec<_> = data.split("/// INCLUDE").collect();
-    let split2 : Vec<_> = split1[1].split("/// SKETCH LIST").collect();
-
-    let mut output_file = std::fs::File::create(filename)?;
-    write!(output_file, "{}", split1[0])?;
-    write!(output_file, "{}\n", include.replace("{name}", name).replace("{background}", background).replace("{label}", label))?;
-    write!(output_file, "/// INCLUDE\n")?;
-    write!(output_file, "{}", split2[0])?;
-    write!(output_file, "/// SKETCH LIST\n")?;
-    write!(output_file, "\t{}", macro_line.replace("{name}", name).replace("{background}", background).replace("{label}", label))?;
-    write!(output_file, "{}", split2[1])?;
-
-    Ok(())
-}
-
 fn write_template(data: &str, name: &str, root: &PathBuf, background: &str, label: &str) -> Result<(), std::io::Error> {
     let filename = root.join(format!("src/sketches/{}.h", name));
+    if filename.exists() {
+        return Ok(());
+    }
+
     let data = data.replace("{name}", name).replace("{background}", background).replace("{label}", label);
 
     let mut output_file = std::fs::File::create(filename)?;
@@ -71,7 +59,11 @@ fn main() -> Result<(), std::io::Error> {
     let label = opt.label_color.unwrap_or_else(|| random_color().to_owned());
     let background = opt.background_color.unwrap_or_else(|| random_color().to_owned());
 
-    add_sketch_entries(&project_name, &include, &macro_line, &opt.project_dir, &background, &label)?;
+    // cpp::add_sketch_entries(&project_name, &include, &macro_line, &opt.project_dir, &background, &label)?;
+    if vs::has_project(&opt.project_dir) {
+        vs::add_to_vcxproj(&opt.project_dir, &project_name)?;
+        vs::add_to_filters(&opt.project_dir, &project_name)?;
+    }
 
     match template {
         Some(data) => write_template(data, &project_name, &opt.project_dir, &background, &label)?,
