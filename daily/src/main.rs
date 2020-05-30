@@ -1,20 +1,32 @@
+#[macro_use] extern crate pathsep;
+
 use structopt::StructOpt;
 use std::path::PathBuf;
 use artcode::BatDate;
-use chrono::Local;
+use chrono::{Local, NaiveDate};
 use std::io::prelude::*;
 
 mod colors;
 mod vs;
 mod cpp;
+mod error;
 
 use colors::random_color;
+
+macro_rules! SKETCH_PATH {
+    ($i:ident) => {
+        format!(concat!("src", path_separator!(), "sketches", path_separator!(), "{}.h"), $i)
+    };
+}
 
 #[derive(Debug, StructOpt)]
 #[structopt(name = "daily", about = "Adds a new daily sketch to avoid all the boilerplate setup")]
 struct Opt {
     #[structopt(short, long)]
     shame: bool,
+
+    #[structopt(short, long, help="YYYYmmdd")]
+    date: Option<String>,
 
     #[structopt(short, long)]
     label_color: Option<String>,
@@ -29,14 +41,19 @@ struct Opt {
     project_dir: PathBuf,
 }
 
-fn calculate_project_name() -> Result<String, std::io::Error> {
-    let date : BatDate = Local::today().into();
+fn calculate_project_name(date: &Option<String>) -> Result<String, error::RuntimeError> {
+    let date : BatDate = match date {
+        Some(d) => NaiveDate::parse_from_str(d, "%Y%m%d")
+            .map_err(|_| error::RuntimeError::InvalidArgument(d.to_owned()))?
+            .into(),
+        None => Local::today().into()
+    };
     let project_name = date.to_string().split_off(3).replace(".", "_");
     Ok(project_name)
 }
 
 fn write_template(data: &str, name: &str, root: &PathBuf, background: &str, label: &str) -> Result<(), std::io::Error> {
-    let filename = root.join(format!("src/sketches/{}.h", name));
+    let filename = root.join(SKETCH_PATH!(name));
     if filename.exists() {
         println!("File already exists, skipping writing the new file");
         return Ok(());
@@ -55,8 +72,8 @@ fn generate_new(project_name: &str, project_dir: &PathBuf, background: &str, lab
 }
 
 fn copy_from(name: &str, project_dir: &PathBuf, source: &str) -> std::io::Result<()> {
-    let source_path = project_dir.join(format!("src/sketches/{}.h", source));
-    let dest_path = project_dir.join(format!("src/sketches/{}.h", name));
+    let source_path = project_dir.join(SKETCH_PATH!(source));
+    let dest_path = project_dir.join(SKETCH_PATH!(name));
     println!("{} -> {}", source_path.to_string_lossy(), dest_path.to_string_lossy());
 
     let data = std::fs::read_to_string(&source_path)?;
@@ -69,7 +86,8 @@ fn main() -> Result<(), std::io::Error> {
     let opt = Opt::from_args();
 
     let _ = opt.project_dir.exists() || Err(std::io::Error::new(std::io::ErrorKind::NotFound, "Could not find project dir"))?;
-    let project_name = calculate_project_name()?;
+    let project_dir = opt.project_dir.canonicalize()?;
+    let project_name = calculate_project_name(&opt.date)?;
     println!("Creating {}", project_name);
 
     let label = opt.label_color.unwrap_or_else(|| random_color().to_owned());
@@ -82,15 +100,15 @@ fn main() -> Result<(), std::io::Error> {
 
     if !opt.shame {
         match opt.from {
-            Some(n) => copy_from(&project_name, &opt.project_dir, &n)?,
-            None => generate_new(&project_name, &opt.project_dir, &background, &label)?
+            Some(n) => copy_from(&project_name, &project_dir, &n)?,
+            None => generate_new(&project_name, &project_dir, &background, &label)?
 
         }
     }
     cpp::add_sketch_entries(&project_name, &include, &macro_line, &opt.project_dir, &background, &label)?;
-    if vs::has_project(&opt.project_dir) {
-        vs::add_to_vcxproj(&opt.project_dir, &project_name)?;
-        vs::add_to_filters(&opt.project_dir, &project_name)?;
+    if vs::has_project(&project_dir) {
+        vs::add_to_vcxproj(&project_dir, &project_name)?;
+        vs::add_to_filters(&project_dir, &project_name)?;
     }
 
 
