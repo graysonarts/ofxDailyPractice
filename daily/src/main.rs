@@ -22,6 +22,9 @@ struct Opt {
     #[structopt(short, long)]
     background_color: Option<String>,
 
+    #[structopt(short, long)]
+    from: Option<String>,
+
     #[structopt(name="PATH", parse(from_os_str))]
     project_dir: PathBuf,
 }
@@ -35,12 +38,30 @@ fn calculate_project_name() -> Result<String, std::io::Error> {
 fn write_template(data: &str, name: &str, root: &PathBuf, background: &str, label: &str) -> Result<(), std::io::Error> {
     let filename = root.join(format!("src/sketches/{}.h", name));
     if filename.exists() {
+        println!("File already exists, skipping writing the new file");
         return Ok(());
+    } else {
+        println!("Writing out: {}", filename.to_string_lossy());
     }
 
     let data = data.replace("{name}", name).replace("{background}", background).replace("{label}", label);
 
     let mut output_file = std::fs::File::create(filename)?;
+    write!(output_file, "{}", data)
+}
+
+fn generate_new(project_name: &str, project_dir: &PathBuf, background: &str, label: &str) -> std::io::Result<()> {
+    write_template(include_str!("normal.h.tmpl"), project_name, project_dir, background, label)
+}
+
+fn copy_from(name: &str, project_dir: &PathBuf, source: &str) -> std::io::Result<()> {
+    let source_path = project_dir.join(format!("src/sketches/{}.h", source));
+    let dest_path = project_dir.join(format!("src/sketches/{}.h", name));
+    println!("{} -> {}", source_path.to_string_lossy(), dest_path.to_string_lossy());
+
+    let data = std::fs::read_to_string(&source_path)?;
+    let data = data.replace(source, name);
+    let mut output_file = std::fs::File::create(dest_path)?;
     write!(output_file, "{}", data)
 }
 
@@ -51,24 +72,28 @@ fn main() -> Result<(), std::io::Error> {
     let project_name = calculate_project_name()?;
     println!("Creating {}", project_name);
 
-    let (template, macro_line, include) = match opt.shame {
-        true => (None, r#"SHAME({name}, ofColor::{background}, ofColor::{label});"#, "// {name} - SHAME!"),
-        false => (Some(include_str!("normal.h.tmpl")), r#"SKETCH({name});"#, r#"#include "{name}.h""#),
-    };
-
     let label = opt.label_color.unwrap_or_else(|| random_color().to_owned());
     let background = opt.background_color.unwrap_or_else(|| random_color().to_owned());
 
-    // cpp::add_sketch_entries(&project_name, &include, &macro_line, &opt.project_dir, &background, &label)?;
+    let (macro_line, include) = match opt.shame {
+        true => (r#"SHAME({name}, ofColor::{background}, ofColor::{label});"#,  "// {name} - SHAME!"),
+        false => ( r#"SKETCH({name});"#, r#"#include "{name}.h""#)
+    };
+
+    if !opt.shame {
+        match opt.from {
+            Some(n) => copy_from(&project_name, &opt.project_dir, &n)?,
+            None => generate_new(&project_name, &opt.project_dir, &background, &label)?
+
+        }
+    }
+    cpp::add_sketch_entries(&project_name, &include, &macro_line, &opt.project_dir, &background, &label)?;
     if vs::has_project(&opt.project_dir) {
         vs::add_to_vcxproj(&opt.project_dir, &project_name)?;
         vs::add_to_filters(&opt.project_dir, &project_name)?;
     }
 
-    match template {
-        Some(data) => write_template(data, &project_name, &opt.project_dir, &background, &label)?,
-        _ => ()
-    };
+
 
 
     Ok(())
