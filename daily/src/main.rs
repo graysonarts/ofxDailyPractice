@@ -106,7 +106,7 @@ fn main() -> Result<(), std::io::Error> {
         }
     }
     cpp::add_sketch_entries(&project_name, &include, &macro_line, &opt.project_dir, &background, &label)?;
-    if vs::has_project(&project_dir) {
+    if vs::has_project(&project_dir) && !opt.shame {
         vs::add_to_vcxproj(&project_dir, &project_name)?;
         vs::add_to_filters(&project_dir, &project_name)?;
     }
