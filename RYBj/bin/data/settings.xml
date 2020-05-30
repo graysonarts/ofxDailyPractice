@@ -19,4 +19,22 @@
 		<buffer>20</buffer>
 		<width>4.03061</width>
 	</j1_5>
+	<k1_6>
+		<Margins>96.9388</Margins>
+	</k1_6>
+	<group>
+		<new_Point_Interval>1000</new_Point_Interval>
+	</group>
+	<j2_3>
+		<Radius>250</Radius>
+	</j2_3>
+	<j2_2>
+		<Radius>250</Radius>
+	</j2_2>
+	<j2_1>
+		<Radius>250</Radius>
+	</j2_1>
+	<j1_7>
+		<maxRadius>300</maxRadius>
+	</j1_7>
 </group>

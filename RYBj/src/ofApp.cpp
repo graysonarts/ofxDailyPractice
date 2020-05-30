@@ -33,9 +33,11 @@ void ofApp::setup(){
 
 	gui.loadFromFile("settings.xml");
 	ofAddListener(sceneChange, this, &ofApp::onSceneChange);
-	onSceneChange();
 	ofClear(0);
 	ofSetBackgroundAuto(false);
+
+	onSceneChange();
+
 }
 
 //--------------------------------------------------------------
@@ -85,13 +87,19 @@ void ofApp::draw(){
 
 void ofApp::onSceneChange() {
 	sceneTime = ofGetElapsedTimef();
-	if (selectedScene >= 0 && selectedScene < sketches.size()) sketches.at(selectedScene)->stop();
+	if (selectedScene >= 0 && selectedScene < sketches.size()) {
+		sketches.at(selectedScene)->stop();
+		sketches.at(selectedScene)->removeControls();
+	}
+
 
 	selectedScene = (selectedScene + 1) % sketches.size();
 
 	sketches.at(selectedScene)->reset();
 	sketchName = "sk. " + sketches.at(selectedScene)->name();
 	labelColor = sketches.at(selectedScene)->labelColor();
+
+	sketches.at(selectedScene)->addControls();
 }
 
 //--------------------------------------------------------------
@@ -107,6 +115,8 @@ void ofApp::keyPressed(int key){
 		sketches.at(selectedScene)->reset();
 		break;
 	case 's':
+		ofLog() << "Saving Frame";
+		glReadBuffer(GL_FRONT);
 		ofSaveFrame();
 		break;
 	}

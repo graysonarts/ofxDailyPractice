@@ -19,6 +19,8 @@ public:
 	virtual void onButton(float x, float y) { }
 	virtual void onMove(float x, float y) { }
 	virtual bool isInteractive() { return false; }
+	virtual void addControls() { }
+	virtual void removeControls() { }
 
 protected:
 	ofApp* parent;

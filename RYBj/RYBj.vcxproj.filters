@@ -1291,6 +1291,9 @@
     <ClInclude Include="src\sketches\j2_5.h">
       <Filter>src\sketches</Filter>
     </ClInclude>
+    <ClInclude Include="src\sketches\k1_6.h">
+      <Filter>src\sketches</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="bin\data\shader.vert">
