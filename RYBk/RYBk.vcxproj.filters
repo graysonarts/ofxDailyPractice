@@ -277,15 +277,6 @@
     <ClInclude Include="src\ofApp.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\sketches\j1_2.h">
-      <Filter>src\sketches</Filter>
-    </ClInclude>
-    <ClInclude Include="src\sketches\j1_4.h">
-      <Filter>src\sketches</Filter>
-    </ClInclude>
-    <ClInclude Include="src\sketches\j1_5.h">
-      <Filter>src\sketches</Filter>
-    </ClInclude>
     <ClInclude Include="src\sketches\shame.h">
       <Filter>src\sketches</Filter>
     </ClInclude>
@@ -1270,25 +1261,7 @@
     <ClInclude Include="..\..\of_v0.11.0_vs2017_release\addons\ofxOpenCv\libs\opencv\include\opencv2\world.hpp">
       <Filter>addons\ofxOpenCv\libs\opencv\include\opencv2</Filter>
     </ClInclude>
-    <ClInclude Include="src\sketches\j1_6.h">
-      <Filter>src\sketches</Filter>
-    </ClInclude>
-    <ClInclude Include="src\sketches\j1_7.h">
-      <Filter>src\sketches</Filter>
-    </ClInclude>
-    <ClInclude Include="src\sketches\j2_1.h">
-      <Filter>src\sketches</Filter>
-    </ClInclude>
-    <ClInclude Include="src\sketches\j2_2.h">
-      <Filter>src\sketches</Filter>
-    </ClInclude>
-    <ClInclude Include="src\sketches\j2_3.h">
-      <Filter>src\sketches</Filter>
-    </ClInclude>
-    <ClInclude Include="src\sketches\j2_4.h">
-      <Filter>src\sketches</Filter>
-    </ClInclude>
-    <ClInclude Include="src\sketches\j2_5.h">
+    <ClInclude Include="src\sketches\k1_6.h">
       <Filter>src\sketches</Filter>
     </ClInclude>
   </ItemGroup>

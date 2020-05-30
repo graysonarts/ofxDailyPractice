@@ -26,7 +26,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7FD42DF7-442E-479A-BA76-D0022F99702A}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>RYBj</RootNamespace>
+    <RootNamespace>RYBk</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -209,16 +209,7 @@
   <ItemGroup>
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="src\interface.h" />
-    <ClInclude Include="src\sketches\j1_2.h" />
-    <ClInclude Include="src\sketches\j1_4.h" />
-    <ClInclude Include="src\sketches\j1_5.h" />
-    <ClInclude Include="src\sketches\j1_6.h" />
-    <ClInclude Include="src\sketches\j1_7.h" />
-    <ClInclude Include="src\sketches\j2_1.h" />
-    <ClInclude Include="src\sketches\j2_2.h" />
-    <ClInclude Include="src\sketches\j2_3.h" />
-    <ClInclude Include="src\sketches\j2_4.h" />
-    <ClInclude Include="src\sketches\j2_5.h" />
+    <ClInclude Include="src\sketches\k1_6.h" />
     <ClInclude Include="src\sketches\shame.h" />
     <ClInclude Include="src\sketches\sketches.h" />
     <ClInclude Include="..\..\of_v0.11.0_vs2017_release\addons\ofxGui\src\ofxBaseGui.h" />

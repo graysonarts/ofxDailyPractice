@@ -11,13 +11,7 @@
 #include "j2_3.h"
 #include "j2_4.h"
 #include "j2_5.h"
-#include "k1_6.h"
 /// INCLUDE
-
-
-
-
-
 
 #include "shame.h"
 
@@ -32,7 +26,8 @@ std::vector<std::unique_ptr<IDailySketch> > getSketches(ofApp* parent) {
 	std::vector<std::unique_ptr<IDailySketch> > retval;
 
 	/// SKETCH LIST
-	SKETCH(k1_6);
+	SHAME(j2_7, ofColor::mediumTurquoise, ofColor::antiqueWhite);
+	SHAME(j2_6, ofColor::wheat, ofColor::blue);
 	SKETCH(j2_5);
 	SKETCH(j2_4);
 	SKETCH(j2_3);
