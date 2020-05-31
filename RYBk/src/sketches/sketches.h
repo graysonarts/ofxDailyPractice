@@ -1,6 +1,7 @@
 #pragma once
 
 #include "k1_6.h"
+#include "k1_7.h"
 /// INCLUDE
 
 #include "shame.h"
@@ -16,6 +17,7 @@ std::vector<std::unique_ptr<IDailySketch> > getSketches(ofApp* parent) {
 	std::vector<std::unique_ptr<IDailySketch> > retval;
 
 	/// SKETCH LIST
+	SKETCH(k1_7);
 	SKETCH(k1_6);
 	SHAME(k1_5, ofColor::wheat, ofColor::darkOliveGreen);
 	SHAME(k1_4, ofColor::lemonChiffon, ofColor::maroon);
