@@ -3,6 +3,9 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+	
+	midi.setup();
+
 #ifdef NDI_OUTPUT
 	ndi = new NdiOut(ofGetWidth(), ofGetHeight());
 #endif

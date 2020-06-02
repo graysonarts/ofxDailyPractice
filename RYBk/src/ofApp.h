@@ -4,8 +4,9 @@
 #include "interface.h"
 #include "ofxGui.h"
 #include "ofxOpenCv.h"
+#include "Apc40mk2.h"
 
-class ofApp : public ofBaseApp{
+class ofApp : public ofBaseApp, public IReceiver {
 
 	public:
 		void setup();
@@ -43,6 +44,8 @@ class ofApp : public ofBaseApp{
 		ofxPanel gui;
 		bool showGui = false;
 		ofImage savedScreen;
+		Apc40mk2 midi;
+
 		
 #ifdef NDI_OUTPUT
 		NdiOut *ndi;

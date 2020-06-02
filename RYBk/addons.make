@@ -1,3 +1,4 @@
 ofxGui
+ofxMidi
 ofxNDI
 ofxOpenCv
