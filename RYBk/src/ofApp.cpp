@@ -93,8 +93,8 @@ void ofApp::onSceneChange() {
 	if (selectedScene >= 0 && selectedScene < sketches.size()) {
 		sketches.at(selectedScene)->stop();
 		sketches.at(selectedScene)->removeControls();
+		midi.clear();
 	}
-
 
 	selectedScene = (selectedScene + 1) % sketches.size();
 

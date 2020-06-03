@@ -1,53 +1,61 @@
 #pragma once
 
-#include <unorderd_map>
+#include <unordered_map>
 
 #include "ofMain.h"
 #include "ofxMidi.h"
 
-typedef void (*Setter)(int);
+
 
 class IReceiver {
 public:
+	virtual void trigger(int control, int channel, int note, bool state) { }
+	virtual void setValue(int control, int channel, int note, int value) { }
 	virtual ~IReceiver() { }
 };
 
 class ApcCtrl {
 public:
-	const int channel, note, outChannel, outNote;
-	const Setter& setter;
-	ofxMidiOut& out;
+	const int type, channel, note;
+	IReceiver* receiver;
 
 
-	ApcCtrl(int channel, int note, Setter& setter, int outChannel, int outNote, ofxMidiOut& out)
-		: channel(channel), note(note), setter(setter), out(out), outChannel(outChannel), outNote(outNote) {
+	ApcCtrl(int type, int channel, int note, IReceiver& receiver)
+		: type(type), channel(channel), note(note), receiver(&receiver) {
 
 	}
 
-	void receive(int velocity) {
-		setter(velocity);
-	}
-
-	void send(int velocity = 64) {
-		out.sendNoteOn(outChannel, outNote, velocity);
-	}
-
-	void clear() {
-		out.sendNoteOff(outChannel, outNote);
+	void receive(int velocity, int value) {
+		switch (type) {
+		case 0:
+			receiver->trigger(type, channel, note, velocity == 127); break;
+		default:
+			receiver->setValue(type, channel, note, value); break;
+		}
 	}
 };
 
 struct ApcKey {
+	int type;
 	int channel;
 	int note;
+
+	bool operator==(const ApcKey& p) const {
+		return type == p.type && channel == p.channel && note == p.note;
+	}
+};
+
+struct HashApcKey {
+	std::size_t operator()(const ApcKey& key) const {
+		return std::hash<int>()(key.channel) ^ std::hash<int>()(key.note) ^ std::hash<int>()(key.type);
+	}
 };
 
 class Apc40mk2 : public ofxMidiListener
 {
 	ofxMidiIn mIn;
-	ofxMidiOut mOut;
 	bool initialized;
-	std::unordered_map<ApcKey, ApcCtrl*> controls;
+	std::unordered_map<ApcKey, ApcCtrl*, HashApcKey> controls;
 
 public:
 	Apc40mk2();
@@ -55,8 +63,9 @@ public:
 
 	void setup();
 	virtual void newMidiMessage(ofxMidiMessage& message);
+	ApcCtrl* add(int type, int channel, int note, IReceiver& receiver);
 
-	void add(int channel, int note, int outChannel, int outNote, Setter& setter);
 	void clear();
+private:
 };
 

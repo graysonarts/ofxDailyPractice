@@ -6,20 +6,101 @@
 #include "ofxGui.h"
 
 SKETCH_BEGIN(k2_2, ofColor::bisque)
+float knobs[3];
+float lens[3];
+float angles[3];
+int stepCount = 300;
+
+bool triggered = false;
 	void setup() {
 	}
 
 	void reset() {
+		// Clear Screen Clip Launch 1
+		parent->midi.add(0, 1, 0, *this);
+		
+		// 1-3 sliders - Length
+		parent->midi.add(7, 1, 0,  *this);
+		parent->midi.add(7, 2, 0, *this);
+		parent->midi.add(7, 3, 0, *this);
+		
+		// 1-3 knobs - angle speed
+		parent->midi.add(48, 1, 0, *this);
+		parent->midi.add(49, 1, 0, *this);
+		parent->midi.add(50, 1, 0, *this);
+
+		// Master Count Step
+		parent->midi.add(14, 1, 0, *this);
+
+		ofSetBackgroundAuto(false);
+		ofClear(ofColor::blueViolet);
+		ofEnableAlphaBlending();
+		ofEnableBlendMode(OF_BLENDMODE_ALPHA);
+
+		for (int i = 0; i < 3; i++) {
+			knobs[i] = 0; lens[i] = 10.; angles[i] = 0;
+		}
 	}
 
 	void update() {
+		for (int i = 0; i < 3; i++) {
+			angles[i] += ofMap(knobs[i], 0., 127.0, -.0 * (i+100), .01 * (i+100));
+		}
 	}
 
 	void draw() {
+		//if (triggered) {
+			ofBackground(ofColor::blueViolet);
+		//	triggered = false;
+		//}
+		//ofFill();
+		//ofSetColor(ofColor::blueViolet, 25.);
+		//ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+
 		ofPushMatrix();
 		ofTranslate(ofGetWidth() / 2., ofGetHeight() / 2.);
-		ofBackground(ofColor::blueViolet);
+
+		ofSetColor(labelColor());
+
+		for (int steps = 0; steps < stepCount; steps++) {
+			glm::vec2 location = { 0, 0 };
+
+			for (int i = 0; i < 3; i++) {
+				location += { lens[i] * glm::cos(angles[i]), lens[i] * glm::sin(angles[i]) };
+				ofDrawCircle(location, 2.);
+			}
+
+			ofDrawCircle(location, 5.);
+
+			update();
+		}
+
+		//ofSetColor(ofColor::blueViolet);
+		//ofDrawRectangle(0, 0, 400., 100.);
+		//ofSetColor(labelColor());
+		//string label = "1: " + std::to_string(knobs[0]) + ", " + std::to_string(lens[0]) + ", " + std::to_string(angles[0]);
+		//parent->semibold.drawString(label, 0, 0);
 		ofPopMatrix();
+	}
+
+	virtual void trigger(int control, int channel, int note, bool state) {
+		if (state) triggered = true;
+	}
+
+	virtual void setValue(int control, int channel, int note, int value) {
+		switch (control) {
+			case 7:
+				lens[channel - 1] = ofMap(value, 0., 127., 10., 300.); break;
+			case 14:
+				stepCount = ofMap(value, 0, 127, 1000, 5000); break;
+			case 48:
+			case 49:
+			case 50:
+				knobs[control-48] = value; break;
+			default:
+				ofLog() << "ctrl(" << control << ") ch(" << channel << ") n(" << note << ") v(" << value << ")";
+				break;
+		}
 	}
 
 private:

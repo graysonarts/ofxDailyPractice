@@ -1,12 +1,14 @@
 #pragma once
 
 #include "ofMain.h"
+#include "Apc40mk2.h"
 
 class ofApp;
 
 class IDailySketch {
 public:
 	IDailySketch(ofApp* parent) : parent(parent) { }
+	virtual ~IDailySketch() { }
 	virtual const string name() const = 0;
 	virtual const ofColor labelColor() const = 0;
 	virtual void setup() {}
@@ -27,7 +29,7 @@ protected:
 };
 
 #define SKETCH_BEGIN(sketch, color) \
-class sketch : public IDailySketch { \
+class sketch : public IDailySketch, public IReceiver { \
 	string _name; \
 	public: \
 		sketch(ofApp* parent) : IDailySketch(parent) { \
