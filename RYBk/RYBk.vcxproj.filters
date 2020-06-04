@@ -335,6 +335,9 @@
     <ClInclude Include="src\sketches\k2_2.h">
       <Filter>src\sketches</Filter>
     </ClInclude>
+    <ClInclude Include="src\sketches\k2_4.h">
+      <Filter>src\sketches</Filter>
+    </ClInclude>
     <ClInclude Include="src\sketches\shame.h">
       <Filter>src\sketches</Filter>
     </ClInclude>

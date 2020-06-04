@@ -5,6 +5,7 @@
 #include "k2_1.h"
 #include "k2_2.h"
 #include "k2_3.h"
+#include "k2_4.h"
 /// INCLUDE
 
 #include "shame.h"
@@ -20,6 +21,7 @@ std::vector<std::unique_ptr<IDailySketch> > getSketches(ofApp* parent) {
 	std::vector<std::unique_ptr<IDailySketch> > retval;
 
 	/// SKETCH LIST
+	SKETCH(k2_4);
 	SKETCH(k2_3);
 	SKETCH(k2_2);
 	SKETCH(k2_1);

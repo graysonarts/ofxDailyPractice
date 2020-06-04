@@ -45,10 +45,10 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update() {
-	float duration = sketches.at(selectedScene)->shortDuration() ? shortSceneDuration : sceneDuration;
-	if (ofGetElapsedTimef() - sceneTime > duration) {
-		ofNotifyEvent(sceneChange);
-	}
+	//float duration = sketches.at(selectedScene)->shortDuration() ? shortSceneDuration : sceneDuration;
+	//if (ofGetElapsedTimef() - sceneTime > duration) {
+	//	ofNotifyEvent(sceneChange);
+	//}
 
 	sketches.at(selectedScene)->update();
 }

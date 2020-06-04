@@ -15,6 +15,7 @@ Apc40mk2::~Apc40mk2() {
 void Apc40mk2::setup() {
 	mIn.openPort("APC40 mkII 0");
 	mIn.addListener(this);
+	mOut.openPort("APC40 mkII 0");
 
 	initialized = true;
 	//mIn.listInPorts();
@@ -36,10 +37,14 @@ void Apc40mk2::newMidiMessage(ofxMidiMessage& message) {
 }
 
 
-ApcCtrl* Apc40mk2::add(int type, int channel, int note, IReceiver& receiver) {
+ApcCtrl* Apc40mk2::add(int type, int channel, int note, IReceiver& receiver, bool sendClear) {
 	ApcCtrl* control = new ApcCtrl(type, channel, note, receiver);
 	ApcKey key = { type, channel, note };
 	controls[key] = control;
+
+	if (sendClear) {
+		mOut.sendControlChange(channel, type, 64.);
+	}
 
 	return control;
 }

@@ -54,6 +54,7 @@ struct HashApcKey {
 class Apc40mk2 : public ofxMidiListener
 {
 	ofxMidiIn mIn;
+	ofxMidiOut mOut;
 	bool initialized;
 	std::unordered_map<ApcKey, ApcCtrl*, HashApcKey> controls;
 
@@ -63,7 +64,7 @@ public:
 
 	void setup();
 	virtual void newMidiMessage(ofxMidiMessage& message);
-	ApcCtrl* add(int type, int channel, int note, IReceiver& receiver);
+	ApcCtrl* add(int type, int channel, int note, IReceiver& receiver, bool sendClear = false);
 
 	void clear();
 private:
