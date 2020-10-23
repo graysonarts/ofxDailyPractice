@@ -1,12 +1,14 @@
 #pragma once
 
 #include "ofMain.h" 
+#include "ofxkdtree.h"
 #include "boid.h"
 
 const float SCALE = 30;
 const float NEIGHBORHOOD = 50;
-const float BUFFER = 25;
-const float INCREMENT = 0.01;
+const float BUFFER = 50;
+const float INCREMENT = 0.05;
+const float MAX_CHAOS = 10.;
 
 class ofApp : public ofBaseApp{
 
@@ -33,7 +35,6 @@ private:
 	ofColor boidColor;
 	ofColor neighborColor;
 	float** field;
-	std::vector<boid*>** neighbors;
 	std::vector<boid> boids;
 	int cols, rows, nRows, nCols;
 	float xoff, yoff, zoff;
@@ -49,8 +50,11 @@ private:
 	glm::vec2 bounds;
 	boid new_boid_at(float x, float y, ofColor c);
 	void build_neighbors();
-	bool is_neighbor_of(boid& subj, boid& test);
-	std::vector<boid*>& neighbors_of(boid& b);
-	glm::vec2 separation_force(boid& b);
-		
+	std::vector<boid*> neighbors_of(boid& b);
+	std::vector<boid*> neighbors_of(glm::vec2& pt, float r);
+	glm::vec2 separation_force(boid& b, std::vector<boid*>& n);
+	glm::vec2 avoid_obstacles(boid& b, std::vector<boid*>& n);
+	
+	std::unique_ptr<ofxQuadtree> tree;
+	ofRectangle boundary;
 };

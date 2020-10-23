@@ -1,19 +1,26 @@
 #include "ofApp.h"
 #include "JzAzBzColor.h"
 
-const int STARTING_BOIDS = 1000;
+const int STARTING_BOIDS = 50000;
 const int PALETTE_SIZE = 5;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+
+	ofSetFrameRate(60.);
 	ofEnableAlphaBlending();
 	ofEnableAntiAliasing();
 	canvas.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
 	output.allocate(ofGetWidth(), ofGetHeight(), OF_IMAGE_COLOR);
+	tree = make_unique<ofxQuadtree>(boundary, 5.);
 
 	paused = false;
 	bounds.x = ofGetWidth();
 	bounds.y = ofGetHeight();
+	boundary.x = ofGetWidth() / 2.;
+	boundary.y = ofGetHeight() / 2.;
+	boundary.width = boundary.x;
+	boundary.height = boundary.y;
 	rows = ofGetHeight() / SCALE;
 	cols = ofGetWidth() / SCALE;
 	nRows = ofGetHeight() / NEIGHBORHOOD;
@@ -26,14 +33,9 @@ void ofApp::setup(){
 	}
 
 	field = new float*[cols];
-	neighbors = new std::vector<boid*> * [nCols];
 	for (int i = 0; i < cols; i++) {
 		field[i] = new float[rows];
 	}
-	for (int i = 0; i < nCols; i++) {
-		neighbors[i] = new std::vector<boid*>[nRows];
-	}
-
 	boids.reserve(STARTING_BOIDS);
 
 	for (int i = 0; i < STARTING_BOIDS; i++) {
@@ -41,7 +43,7 @@ void ofApp::setup(){
 		boids.push_back(new_boid_at(ofRandomWidth(), ofRandomHeight(), c));
 	}
 
-	//ofSetBackgroundAuto(false);
+	ofSetBackgroundAuto(false);
 	initialize();
 }
 
@@ -61,12 +63,13 @@ void ofApp::initialize() {
 	}
 
 	float startY = ofRandomf();
+
 	xoff = ofRandomf();
 
 	for (int i = 0; i < cols; i++) {
 		yoff = startY;
 		for (int j = 0; j < rows; j++) {
-			field[i][j] = ofNoise(xoff, yoff) * (2 * PI);
+			field[i][j] = ofNoise(xoff, yoff, zoff) * (2 * PI);
 			yoff += increment;
 		}
 		xoff += increment;
@@ -78,9 +81,9 @@ void ofApp::initialize() {
 }
 
 ofColor ofApp::jab_random(float j, float a, float b) {
-	j += ofRandomf();
-	a += ofRandomf();
-	b += ofRandomf();
+	j = 1;
+	a += ofRandomuf();
+	b += ofRandomuf();
 
 	return jab_to_of(j, a, b);
 }
@@ -91,10 +94,14 @@ void ofApp::update(){
 	if (paused) return;
 
 	for (auto& b : boids) {
-		// Apply Flow Field
-		apply_force(b, field_force_at(b.pos.x, b.pos.y, glm::length(b.max_speed)) - b.vel);
-		// Apply Spacing
-		apply_force(b, separation_force(b));
+		auto& n = neighbors_of(b);
+
+		glm::vec2 flow = field_force_at(b.pos.x, b.pos.y, glm::length(b.max_speed)) - b.vel;
+		glm::vec2 sep = separation_force(b, n);
+		glm::vec2 seek = avoid_obstacles(b, n);
+		glm::vec2 chaos = { ofRandomf(), ofRandomf() };
+		chaos = glm::normalize(chaos) * MAX_CHAOS - b.vel;
+		apply_force(b, flow * 0.5 + sep + seek + chaos * 0.25);
 	}
 
 	for (auto& b : boids) {
@@ -109,18 +116,22 @@ glm::vec2 ofApp::field_force_at(float x, float y, float speed) {
 	int col = ofClamp((int)floor(x / SCALE), 0, cols - 1);
 	float angle = field[col][row];
 
-	return { speed * cos(angle), speed * sin(angle) };
+	glm::vec2 force = { sin(angle), cos(angle) };
+
+	return glm::normalize(force) * speed;
 }
 
-glm::vec2 ofApp::separation_force(boid& b) {
-	auto& n = neighbors_of(b);
+glm::vec2 ofApp::avoid_obstacles(boid& b, std::vector<boid*>& n) {
+	glm::vec2 future = b.pos + b.vel;
+	float distance = glm::length2(future);
 	int count = 0;
 	glm::vec2 sum = { 0, 0 };
 
-	for (auto o : n) {
+	std::vector<boid*> possible = neighbors_of(future, NEIGHBORHOOD / 2.);
+	for (auto o : possible) {
 		float d = glm::distance(o->pos, b.pos);
 		if (d > 0 && d < BUFFER) {
-			glm::vec2 diff = glm::normalize(b.pos - o->pos);
+			glm::vec2 diff = o->pos - b.pos;
 			sum += diff;
 			count++;
 		}
@@ -128,60 +139,89 @@ glm::vec2 ofApp::separation_force(boid& b) {
 
 	if (count > 0) {
 		sum /= count;
-		sum = glm::normalize(sum) * b.max_speed;
-
+		sum *= b.max_speed;
+		if (glm::length(sum) > glm::length(b.max_speed)) {
+			sum = glm::normalize(sum) *  distance * b.max_speed;
+		}
 		sum -= b.vel;
+		if (glm::length(sum) > glm::length(b.max_speed)) {
+			sum = glm::normalize(sum) * b.max_speed;
+		}
+	}
+
+	return { 0, 0 };
+}
+
+glm::vec2 ofApp::separation_force(boid& b, std::vector<boid*>& n) {
+
+	int count = 0;
+	glm::vec2 sum = { 0, 0 };
+
+	for (auto o : n) {
+		float d = glm::distance(o->pos, b.pos);
+		if (d > 0 && d < BUFFER) {
+			glm::vec2 diff = b.pos - o->pos;
+			sum += diff;
+			count++;
+		}
+	} 
+
+	if (count > 0) {
+		sum /= count;
+		sum *= b.max_speed;
+		if (glm::length(sum) > glm::length(b.max_speed)) {
+			sum = glm::normalize(sum) * b.max_speed;
+		}
+		sum -= b.vel;
+		if (glm::length(sum) > glm::length(b.max_speed)) {
+			sum = glm::normalize(sum) * b.max_speed;
+		}
 	}
 
 	return sum;
 }
 
 void ofApp::build_neighbors() {
-	for (int col = 0; col < nCols; col++) {
-		for (int row = 0; row < nRows; row++) {
-			neighbors[col][row].clear();
-		}
-	}
-
-	for ( boid& b : boids) {
-		int x = ofClamp(floor(b.pos.x / NEIGHBORHOOD), 0, nCols - 1);
-		int y = ofClamp(floor(b.pos.y / NEIGHBORHOOD), 0, nRows - 1);
-
-		if (x < 0 || y < 0) continue;
-
-		neighbors[x][y].push_back(&b);
+	tree->clear();
+	for (auto &b : boids) {
+		tree->insert(b.pos, &b);
 	}
 }
 
-bool ofApp::is_neighbor_of(boid& subj, boid& test) {
-	auto& n = neighbors_of(subj);
-
-	auto result = std::find(n.begin(), n.end(), &test);
-
-	return result != n.end();
+std::vector<boid*> ofApp::neighbors_of(boid& b) {
+	return neighbors_of(b.pos, NEIGHBORHOOD);
 }
 
-std::vector<boid*>& ofApp::neighbors_of(boid& b) {
+std::vector<boid*> ofApp::neighbors_of(glm::vec2& pos, float radius) {
 	static std::vector<boid*> empty;
 
-	int x = ofClamp(floor(b.pos.x / NEIGHBORHOOD), 0, nCols - 1);
-	int y = ofClamp(floor(b.pos.y / NEIGHBORHOOD), 0, nRows - 1);
-
-	if (x < 0 || y < 0) {
+	if (tree == nullptr) {
 		return empty;
 	}
 
-	return neighbors[x][y];
+	size_t count = 0;
+
+	boid** results = (boid**) tree->query(pos, radius, count);
+	if (results == nullptr || count == 0) return empty;
+	std::vector<boid*> retval;
+	retval.reserve(count);
+
+	for (int i = 0; i < count; i++) {
+		retval.emplace_back(results[i]);
+	}
+
+	return retval;
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
 
 	canvas.begin();
-	//ofBackground(32);
+	ofEnableBlendMode(OF_BLENDMODE_ALPHA);
+	ofBackground(32);
 
-	//ofSetColor(fieldColor, 96);
-	//ofSetLineWidth(1.);
+	ofSetColor(fieldColor, 96);
+	ofSetLineWidth(1.);
 	//glm::vec3 unit(1.f, 0.f, 0.f);
 	//for (int col = 0; col < cols; col++) {
 	//	for (int row = 0; row < rows; row++) {
@@ -199,9 +239,20 @@ void ofApp::draw(){
 	//}
 
 
-	//ofSetLineWidth(5.);
+
 	for (auto& b : boids) {
-		ofSetColor(b.color, 10);
+		ofSetColor(ofColor::lightSlateGray, 23);
+		//if (tree != nullptr) {
+		//	size_t count;
+		//	boid** neighbors = (boid**) tree->query(b.pos, NEIGHBORHOOD, count);
+		//	ofSetLineWidth(1.0);
+		//	for (int i = 0; i < min(2, (int)count); i++) {
+		//		ofDrawLine(neighbors[i]->pos, b.pos);
+		//	}
+		//}
+
+		ofSetColor(b.color, 32);
+		ofSetLineWidth(2.);
 		ofDrawLine(b.pos, b.previous);
 	}
 	canvas.end();

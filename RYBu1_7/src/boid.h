@@ -12,5 +12,7 @@ struct boid {
 	ofColor color;
 };
 
-void apply_force(boid& b, const glm::vec2& force);
+void apply_force(boid& b, glm::vec2& force);
 void tick(const float dt, boid& b, const glm::vec2& boundaries);
+
+const float MAX_FORCE = 10.;
