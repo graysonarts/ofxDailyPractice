@@ -39,7 +39,7 @@ private:
 	int cols, rows, nRows, nCols;
 	float xoff, yoff, zoff;
 	float increment;
-	bool paused;
+	bool paused, debug;
 	ofFbo canvas;
 	ofPixels output;
 	ofColor jab_random(float j, float a, float b);
@@ -57,4 +57,6 @@ private:
 	
 	std::unique_ptr<ofxQuadtree> tree;
 	ofRectangle boundary;
+
+	ofShader shader;
 };

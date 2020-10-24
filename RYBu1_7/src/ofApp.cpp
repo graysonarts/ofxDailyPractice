@@ -1,20 +1,29 @@
 #include "ofApp.h"
 #include "JzAzBzColor.h"
 
-const int STARTING_BOIDS = 50000;
+const int STARTING_BOIDS = 25000;
 const int PALETTE_SIZE = 5;
 
 //--------------------------------------------------------------
-void ofApp::setup(){
+void ofApp::setup() {
 
 	ofSetFrameRate(60.);
 	ofEnableAlphaBlending();
 	ofEnableAntiAliasing();
+	ofDisableArbTex();
 	canvas.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
 	output.allocate(ofGetWidth(), ofGetHeight(), OF_IMAGE_COLOR);
 	tree = make_unique<ofxQuadtree>(boundary, 5.);
 
-	paused = false;
+	char *version = (char*)glGetString(GL_VERSION);
+	ofLog() << "GL " << version;
+
+	if (!shader.load("shader")) {
+		ofLog() << "Shader failed to load";
+		ofExit();
+	}
+
+	paused = debug = false;
 	bounds.x = ofGetWidth();
 	bounds.y = ofGetHeight();
 	boundary.x = ofGetWidth() / 2.;
@@ -48,9 +57,9 @@ void ofApp::setup(){
 }
 
 void ofApp::initialize() {
-	canvas.begin();
-	ofBackground(32);
-	canvas.end();
+	//canvas.begin();
+	//ofBackground(32);
+	//canvas.end();
 
 	float j = ofRandomuf();
 	float b = ofRandomuf();
@@ -214,50 +223,35 @@ std::vector<boid*> ofApp::neighbors_of(glm::vec2& pos, float radius) {
 }
 
 //--------------------------------------------------------------
-void ofApp::draw(){
-
-	canvas.begin();
-	ofEnableBlendMode(OF_BLENDMODE_ALPHA);
+void ofApp::draw() {
 	ofBackground(32);
 
+	canvas.begin();
+	ofClear(0, 0, 0, 255);
+	ofEnableBlendMode(OF_BLENDMODE_ALPHA);
+
 	ofSetColor(fieldColor, 96);
-	ofSetLineWidth(1.);
-	//glm::vec3 unit(1.f, 0.f, 0.f);
-	//for (int col = 0; col < cols; col++) {
-	//	for (int row = 0; row < rows; row++) {
-	//		float x = (col + 1.) * SCALE;
-	//		float y = (row + 1.) * SCALE;
-	//		
-	//		ofPushMatrix();
-	//		ofTranslate(x, y);
-	//		auto v = glm::rotateZ(unit, field[col][row]) * SCALE;
-	//		ofDrawLine(0, 0, v.x, v.y);
-	//		ofPopMatrix();
-
-
-	//	}
-	//}
-
-
-
+	ofSetLineWidth(3.);
 	for (auto& b : boids) {
-		ofSetColor(ofColor::lightSlateGray, 23);
-		//if (tree != nullptr) {
-		//	size_t count;
-		//	boid** neighbors = (boid**) tree->query(b.pos, NEIGHBORHOOD, count);
-		//	ofSetLineWidth(1.0);
-		//	for (int i = 0; i < min(2, (int)count); i++) {
-		//		ofDrawLine(neighbors[i]->pos, b.pos);
-		//	}
-		//}
-
-		ofSetColor(b.color, 32);
-		ofSetLineWidth(2.);
+		ofSetColor(b.color);
 		ofDrawLine(b.pos, b.previous);
 	}
 	canvas.end();
 
-	canvas.draw(0, 0);
+
+	if (debug) {
+		canvas.draw(0, 0);
+	}
+	else {
+		shader.begin();
+		shader.setUniform3f("resolution", { ofGetWidth(), ofGetHeight(), 0 }); //TODO: optimize
+		shader.setUniformTexture("channel0", canvas.getTexture(), 0);
+		shader.setUniform2f("direction", { 2., 0. }); // TODO: optimize
+		ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+		shader.end();
+	}
+
+	//canvas.getTexture().unbind();
 }
 
 //--------------------------------------------------------------
@@ -273,6 +267,9 @@ void ofApp::keyPressed(int key){
 		break;
 	case OF_KEY_RETURN:
 		paused = !paused;
+		break;
+	case OF_KEY_TAB:
+		debug = !debug;
 		break;
 	}
 }
@@ -305,7 +302,7 @@ boid ofApp::new_boid_at(float x, float y, ofColor c) {
 		{ 0, 0 },
 		{ 0, 0 },
 		{ 0, 0 },
-		{ 5, 5 },
+		{ 10., 10. },
 		c
 	};
 }
