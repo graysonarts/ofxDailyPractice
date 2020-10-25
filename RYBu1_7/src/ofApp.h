@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ofMain.h" 
-#include "ofxkdtree.h"
+#include "ofxQuadtree.h"
 #include "boid.h"
 
 const float SCALE = 30;

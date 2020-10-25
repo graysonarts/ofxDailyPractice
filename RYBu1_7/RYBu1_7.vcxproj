@@ -100,7 +100,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\of_v0.11.0_vs2017_release\addons\ofxGui\src;..\..\of_v0.11.0_vs2017_release\addons\ofxkdtree\libs;..\..\of_v0.11.0_vs2017_release\addons\ofxkdtree\libs\libquadtree;..\..\of_v0.11.0_vs2017_release\addons\ofxkdtree\libs\libquadtree\includes;..\..\of_v0.11.0_vs2017_release\addons\ofxkdtree\libs\libquadtree\lib;..\..\of_v0.11.0_vs2017_release\addons\ofxkdtree\libs\libquadtree\lib\vs;..\..\of_v0.11.0_vs2017_release\addons\ofxkdtree\libs\libquadtree\src;..\..\of_v0.11.0_vs2017_release\addons\ofxkdtree\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\of_v0.11.0_vs2017_release\addons\ofxGui\src;..\..\of_v0.11.0_vs2017_release\addons\ofxQuadtree\libs;..\..\of_v0.11.0_vs2017_release\addons\ofxQuadtree\libs\libquadtree;..\..\of_v0.11.0_vs2017_release\addons\ofxQuadtree\libs\libquadtree\includes;..\..\of_v0.11.0_vs2017_release\addons\ofxQuadtree\libs\libquadtree\lib;..\..\of_v0.11.0_vs2017_release\addons\ofxQuadtree\libs\libquadtree\lib\vs;..\..\of_v0.11.0_vs2017_release\addons\ofxQuadtree\libs\libquadtree\src;..\..\of_v0.11.0_vs2017_release\addons\ofxQuadtree\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <ObjectFileName>$(IntDir)</ObjectFileName>
     </ClCompile>
@@ -109,7 +109,7 @@
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <AdditionalDependencies>%(AdditionalDependencies);quadtree.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);..\..\of_v0.11.0_vs2017_release\addons\ofxkdtree\libs\libquadtree\lib\vs</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);..\..\of_v0.11.0_vs2017_release\addons\ofxQuadtree\libs\libquadtree\lib\vs</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent />
   </ItemDefinitionGroup>
@@ -120,7 +120,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\of_v0.11.0_vs2017_release\addons\ofxGui\src;..\..\of_v0.11.0_vs2017_release\addons\ofxkdtree\libs;..\..\of_v0.11.0_vs2017_release\addons\ofxkdtree\libs\libquadtree;..\..\of_v0.11.0_vs2017_release\addons\ofxkdtree\libs\libquadtree\includes;..\..\of_v0.11.0_vs2017_release\addons\ofxkdtree\libs\libquadtree\lib;..\..\of_v0.11.0_vs2017_release\addons\ofxkdtree\libs\libquadtree\lib\vs;..\..\of_v0.11.0_vs2017_release\addons\ofxkdtree\libs\libquadtree\src;..\..\of_v0.11.0_vs2017_release\addons\ofxkdtree\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\of_v0.11.0_vs2017_release\addons\ofxGui\src;..\..\of_v0.11.0_vs2017_release\addons\ofxQuadtree\libs;..\..\of_v0.11.0_vs2017_release\addons\ofxQuadtree\libs\libquadtree;..\..\of_v0.11.0_vs2017_release\addons\ofxQuadtree\libs\libquadtree\includes;..\..\of_v0.11.0_vs2017_release\addons\ofxQuadtree\libs\libquadtree\lib;..\..\of_v0.11.0_vs2017_release\addons\ofxQuadtree\libs\libquadtree\lib\vs;..\..\of_v0.11.0_vs2017_release\addons\ofxQuadtree\libs\libquadtree\src;..\..\of_v0.11.0_vs2017_release\addons\ofxQuadtree\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ObjectFileName>$(IntDir)</ObjectFileName>
@@ -130,7 +130,7 @@
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <AdditionalDependencies>%(AdditionalDependencies);quadtree.lib;userenv.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);..\..\of_v0.11.0_vs2017_release\addons\ofxkdtree\libs\libquadtree\lib\vs</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);..\..\of_v0.11.0_vs2017_release\addons\ofxQuadtree\libs\libquadtree\lib\vs</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent />
   </ItemDefinitionGroup>
@@ -140,7 +140,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\of_v0.11.0_vs2017_release\addons\ofxGui\src;..\..\of_v0.11.0_vs2017_release\addons\ofxkdtree\libs;..\..\of_v0.11.0_vs2017_release\addons\ofxkdtree\libs\libquadtree;..\..\of_v0.11.0_vs2017_release\addons\ofxkdtree\libs\libquadtree\includes;..\..\of_v0.11.0_vs2017_release\addons\ofxkdtree\libs\libquadtree\lib;..\..\of_v0.11.0_vs2017_release\addons\ofxkdtree\libs\libquadtree\lib\vs;..\..\of_v0.11.0_vs2017_release\addons\ofxkdtree\libs\libquadtree\src;..\..\of_v0.11.0_vs2017_release\addons\ofxkdtree\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\of_v0.11.0_vs2017_release\addons\ofxGui\src;..\..\of_v0.11.0_vs2017_release\addons\ofxQuadtree\libs;..\..\of_v0.11.0_vs2017_release\addons\ofxQuadtree\libs\libquadtree;..\..\of_v0.11.0_vs2017_release\addons\ofxQuadtree\libs\libquadtree\includes;..\..\of_v0.11.0_vs2017_release\addons\ofxQuadtree\libs\libquadtree\lib;..\..\of_v0.11.0_vs2017_release\addons\ofxQuadtree\libs\libquadtree\lib\vs;..\..\of_v0.11.0_vs2017_release\addons\ofxQuadtree\libs\libquadtree\src;..\..\of_v0.11.0_vs2017_release\addons\ofxQuadtree\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ObjectFileName>$(IntDir)</ObjectFileName>
@@ -153,7 +153,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <AdditionalDependencies>%(AdditionalDependencies);quadtree.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);..\..\of_v0.11.0_vs2017_release\addons\ofxkdtree\libs\libquadtree\lib\vs</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);..\..\of_v0.11.0_vs2017_release\addons\ofxQuadtree\libs\libquadtree\lib\vs</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent />
   </ItemDefinitionGroup>
@@ -163,7 +163,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\of_v0.11.0_vs2017_release\addons\ofxGui\src;..\..\of_v0.11.0_vs2017_release\addons\ofxkdtree\libs;..\..\of_v0.11.0_vs2017_release\addons\ofxkdtree\libs\libquadtree;..\..\of_v0.11.0_vs2017_release\addons\ofxkdtree\libs\libquadtree\includes;..\..\of_v0.11.0_vs2017_release\addons\ofxkdtree\libs\libquadtree\lib;..\..\of_v0.11.0_vs2017_release\addons\ofxkdtree\libs\libquadtree\lib\vs;..\..\of_v0.11.0_vs2017_release\addons\ofxkdtree\libs\libquadtree\src;..\..\of_v0.11.0_vs2017_release\addons\ofxkdtree\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\of_v0.11.0_vs2017_release\addons\ofxGui\src;..\..\of_v0.11.0_vs2017_release\addons\ofxQuadtree\libs;..\..\of_v0.11.0_vs2017_release\addons\ofxQuadtree\libs\libquadtree;..\..\of_v0.11.0_vs2017_release\addons\ofxQuadtree\libs\libquadtree\includes;..\..\of_v0.11.0_vs2017_release\addons\ofxQuadtree\libs\libquadtree\lib;..\..\of_v0.11.0_vs2017_release\addons\ofxQuadtree\libs\libquadtree\lib\vs;..\..\of_v0.11.0_vs2017_release\addons\ofxQuadtree\libs\libquadtree\src;..\..\of_v0.11.0_vs2017_release\addons\ofxQuadtree\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <ObjectFileName>$(IntDir)</ObjectFileName>
     </ClCompile>
@@ -175,7 +175,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <AdditionalDependencies>%(AdditionalDependencies);quadtree.lib;userenv.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);..\..\of_v0.11.0_vs2017_release\addons\ofxkdtree\libs\libquadtree\lib\vs</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);..\..\of_v0.11.0_vs2017_release\addons\ofxQuadtree\libs\libquadtree\lib\vs</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent />
   </ItemDefinitionGroup>
@@ -194,7 +194,7 @@
     <ClCompile Include="..\..\of_v0.11.0_vs2017_release\addons\ofxGui\src\ofxSlider.cpp" />
     <ClCompile Include="..\..\of_v0.11.0_vs2017_release\addons\ofxGui\src\ofxSliderGroup.cpp" />
     <ClCompile Include="..\..\of_v0.11.0_vs2017_release\addons\ofxGui\src\ofxToggle.cpp" />
-    <ClCompile Include="..\..\of_v0.11.0_vs2017_release\addons\ofxkdtree\src\ofxkdtree.cpp" />
+    <ClCompile Include="..\..\of_v0.11.0_vs2017_release\addons\ofxQuadtree\src\ofxQuadtree.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ofApp.h" />
@@ -212,8 +212,8 @@
     <ClInclude Include="..\..\of_v0.11.0_vs2017_release\addons\ofxGui\src\ofxSlider.h" />
     <ClInclude Include="..\..\of_v0.11.0_vs2017_release\addons\ofxGui\src\ofxSliderGroup.h" />
     <ClInclude Include="..\..\of_v0.11.0_vs2017_release\addons\ofxGui\src\ofxToggle.h" />
-    <ClInclude Include="..\..\of_v0.11.0_vs2017_release\addons\ofxkdtree\src\ofxkdtree.h" />
-    <ClInclude Include="..\..\of_v0.11.0_vs2017_release\addons\ofxkdtree\libs\libquadtree\includes\quadtree.h" />
+    <ClInclude Include="..\..\of_v0.11.0_vs2017_release\addons\ofxQuadtree\src\ofxQuadtree.h" />
+    <ClInclude Include="..\..\of_v0.11.0_vs2017_release\addons\ofxQuadtree\libs\libquadtree\includes\quadtree.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="$(OF_ROOT)\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">
@@ -226,10 +226,6 @@
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/D_DEBUG %(AdditionalOptions)</AdditionalOptions>
       <AdditionalIncludeDirectories>$(OF_ROOT)\libs\openFrameworksCompiled\project\vs</AdditionalIncludeDirectories>
     </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="bin\data\shader.frag" />
-    <None Include="bin\data\shader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ProjectExtensions>
