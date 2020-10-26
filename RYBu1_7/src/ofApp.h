@@ -50,7 +50,6 @@ private:
 	glm::vec2 separation_force(boid& b, std::vector<boid*>& n);
 	glm::vec2 avoid_obstacles(boid& b, std::vector<boid*>& n);
 	void draw_with(ofFbo& source, ofFbo& target, ofShader& shader, const glm::vec2& direction, float scale);
-	void draw_boids();
 	
 	std::unique_ptr<ofxQuadtree> tree;
 	ofRectangle boundary;

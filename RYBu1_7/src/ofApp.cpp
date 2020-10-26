@@ -234,7 +234,7 @@ std::vector<boid*> ofApp::neighbors_of(glm::vec2& pos, float radius) {
 void ofApp::draw() {
 	channel0.begin();
 	ofClear(0, 0, 0, 255);
-	draw_boids();
+	dust->draw_boids();
 	channel0.end();
 
 	channel1.begin();
@@ -250,7 +250,7 @@ void ofApp::draw() {
 	draw_with(channel1, channel0, blur_shade, VERTICAL, 1.);
 
 	channel1.begin();
-	draw_boids();
+	dust->draw_boids();
 	channel1.end();
 
 	add_shade.begin();
@@ -271,10 +271,6 @@ void ofApp::draw_with(ofFbo& source, ofFbo& target, ofShader& s, const glm::vec2
 	ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
 	s.end();
 	target.end();
-}
-
-void ofApp::draw_boids() {
-	dust->draw_boids();
 }
 
 //--------------------------------------------------------------
