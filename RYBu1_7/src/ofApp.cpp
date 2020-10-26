@@ -111,10 +111,9 @@ void ofApp::update(){
 
 		glm::vec2 flow = field_force_at(b.pos.x, b.pos.y, glm::length(b.max_speed)) - b.vel;
 		glm::vec2 sep = separation(b, n);
-		glm::vec2 seek = avoid_obstacles(b, n);
 		glm::vec2 chaos = { ofRandomf(), ofRandomf() };
 		chaos = glm::normalize(chaos) * MAX_CHAOS - b.vel;
-		apply_force(b, flow * 0.25 + sep + seek + chaos * 0.25);
+		apply_force(b, flow * 0.25 + sep + chaos * 0.25);
 	}
 
 	for (auto& b : dust->boids) {
@@ -132,37 +131,6 @@ glm::vec2 ofApp::field_force_at(float x, float y, float speed) {
 	glm::vec2 force = { sin(angle), cos(angle) };
 
 	return glm::normalize(force) * speed;
-}
-
-glm::vec2 ofApp::avoid_obstacles(boid& b, std::vector<boid*>& n) {
-	glm::vec2 future = b.pos + b.vel;
-	float distance = glm::length2(future);
-	int count = 0;
-	glm::vec2 sum = { 0, 0 };
-
-	std::vector<boid*> possible = dust->neighbors_of(future, NEIGHBORHOOD / 2.);
-	for (auto o : possible) {
-		float d = glm::distance(o->pos, b.pos);
-		if (d > 0 && d < BUFFER) {
-			glm::vec2 diff = o->pos - b.pos;
-			sum += diff;
-			count++;
-		}
-	}
-
-	if (count > 0) {
-		sum /= count;
-		sum *= b.max_speed;
-		if (glm::length(sum) > glm::length(b.max_speed)) {
-			sum = glm::normalize(sum) *  distance * b.max_speed;
-		}
-		sum -= b.vel;
-		if (glm::length(sum) > glm::length(b.max_speed)) {
-			sum = glm::normalize(sum) * b.max_speed;
-		}
-	}
-
-	return { 0, 0 };
 }
 
 //--------------------------------------------------------------
