@@ -15,12 +15,6 @@ void ofApp::setup() {
 	channel1.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
 
 	output.allocate(ofGetWidth(), ofGetHeight(), OF_IMAGE_COLOR);
-	boundary.x = ofGetWidth() / 2.;
-	boundary.y = ofGetHeight() / 2.;
-	boundary.width = boundary.x;
-	boundary.height = boundary.y;
-
-	tree = make_unique<ofxQuadtree>(boundary, 5.);
 
 	char *version = (char*)glGetString(GL_VERSION);
 	ofLog() << "GL " << version;
@@ -113,7 +107,7 @@ void ofApp::update(){
 	if (paused) return;
 
 	for (auto& b : dust->boids) {
-		auto& n = neighbors_of(b);
+		auto& n = dust->neighbors_of(b);
 
 		glm::vec2 flow = field_force_at(b.pos.x, b.pos.y, glm::length(b.max_speed)) - b.vel;
 		glm::vec2 sep = separation_force(b, n);
@@ -127,7 +121,7 @@ void ofApp::update(){
 		tick(0, b, bounds);
 	}
 
-	build_neighbors();
+	dust->build_neighbors();
 }
 
 glm::vec2 ofApp::field_force_at(float x, float y, float speed) {
@@ -146,7 +140,7 @@ glm::vec2 ofApp::avoid_obstacles(boid& b, std::vector<boid*>& n) {
 	int count = 0;
 	glm::vec2 sum = { 0, 0 };
 
-	std::vector<boid*> possible = neighbors_of(future, NEIGHBORHOOD / 2.);
+	std::vector<boid*> possible = dust->neighbors_of(future, NEIGHBORHOOD / 2.);
 	for (auto o : possible) {
 		float d = glm::distance(o->pos, b.pos);
 		if (d > 0 && d < BUFFER) {
@@ -198,38 +192,6 @@ glm::vec2 ofApp::separation_force(boid& b, std::vector<boid*>& n) {
 	}
 
 	return sum;
-}
-
-void ofApp::build_neighbors() {
-	tree->clear();
-	for (auto &b : dust->boids) {
-		tree->insert(b.pos, &b);
-	}
-}
-
-std::vector<boid*> ofApp::neighbors_of(boid& b) {
-	return neighbors_of(b.pos, NEIGHBORHOOD);
-}
-
-std::vector<boid*> ofApp::neighbors_of(glm::vec2& pos, float radius) {
-	static std::vector<boid*> empty;
-
-	if (tree == nullptr) {
-		return empty;
-	}
-
-	size_t count = 0;
-
-	boid** results = (boid**) tree->query(pos, radius, count);
-	if (results == nullptr || count == 0) return empty;
-	std::vector<boid*> retval;
-	retval.reserve(count);
-
-	for (int i = 0; i < count; i++) {
-		retval.emplace_back(results[i]);
-	}
-
-	return retval;
 }
 
 //--------------------------------------------------------------

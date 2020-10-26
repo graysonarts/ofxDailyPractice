@@ -16,7 +16,12 @@ public:
 	// Temporarily public items
 	std::vector<boid> boids; 
 	void draw_boids();
+	void build_neighbors();
+	std::vector<boid*> neighbors_of(boid& b);
+	std::vector<boid*> neighbors_of(glm::vec2& pt, float r);
 
 private:
-	std::unique_ptr<ofxQuadtree> tree;
+	ofRectangle boundary;
+	ofxQuadtree tree;
+
 };

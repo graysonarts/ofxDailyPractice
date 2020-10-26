@@ -44,19 +44,14 @@ private:
 
 	glm::vec2 bounds;
 	boid new_boid_at(float x, float y, ofColor c);
-	void build_neighbors();
-	std::vector<boid*> neighbors_of(boid& b);
-	std::vector<boid*> neighbors_of(glm::vec2& pt, float r);
+
 	glm::vec2 separation_force(boid& b, std::vector<boid*>& n);
 	glm::vec2 avoid_obstacles(boid& b, std::vector<boid*>& n);
 	void draw_with(ofFbo& source, ofFbo& target, ofShader& shader, const glm::vec2& direction, float scale);
-	
 
-	ofRectangle boundary;
 
 	ofShader blur_shade;
 	ofShader add_shade;
 
 	std::unique_ptr<MagicDust> dust;
-	std::unique_ptr<ofxQuadtree> tree;
 };
