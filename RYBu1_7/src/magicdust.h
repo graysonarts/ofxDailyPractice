@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxQuadtree.h"
 #include "constants.h"
 #include "boid.h"
 
@@ -17,5 +18,5 @@ public:
 	void draw_boids();
 
 private:
-
+	std::unique_ptr<ofxQuadtree> tree;
 };

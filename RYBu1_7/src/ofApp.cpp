@@ -15,6 +15,11 @@ void ofApp::setup() {
 	channel1.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
 
 	output.allocate(ofGetWidth(), ofGetHeight(), OF_IMAGE_COLOR);
+	boundary.x = ofGetWidth() / 2.;
+	boundary.y = ofGetHeight() / 2.;
+	boundary.width = boundary.x;
+	boundary.height = boundary.y;
+
 	tree = make_unique<ofxQuadtree>(boundary, 5.);
 
 	char *version = (char*)glGetString(GL_VERSION);
@@ -34,10 +39,7 @@ void ofApp::setup() {
 	paused = debug = false;
 	bounds.x = ofGetWidth();
 	bounds.y = ofGetHeight();
-	boundary.x = ofGetWidth() / 2.;
-	boundary.y = ofGetHeight() / 2.;
-	boundary.width = boundary.x;
-	boundary.height = boundary.y;
+
 	rows = ofGetHeight() / SCALE;
 	cols = ofGetWidth() / SCALE;
 	nRows = ofGetHeight() / NEIGHBORHOOD;

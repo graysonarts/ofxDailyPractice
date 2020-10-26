@@ -51,11 +51,12 @@ private:
 	glm::vec2 avoid_obstacles(boid& b, std::vector<boid*>& n);
 	void draw_with(ofFbo& source, ofFbo& target, ofShader& shader, const glm::vec2& direction, float scale);
 	
-	std::unique_ptr<ofxQuadtree> tree;
+
 	ofRectangle boundary;
 
 	ofShader blur_shade;
 	ofShader add_shade;
 
 	std::unique_ptr<MagicDust> dust;
+	std::unique_ptr<ofxQuadtree> tree;
 };
