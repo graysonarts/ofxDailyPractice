@@ -110,7 +110,7 @@ void ofApp::update(){
 		auto& n = dust->neighbors_of(b);
 
 		glm::vec2 flow = field_force_at(b.pos.x, b.pos.y, glm::length(b.max_speed)) - b.vel;
-		glm::vec2 sep = separation_force(b, n);
+		glm::vec2 sep = separation(b, n);
 		glm::vec2 seek = avoid_obstacles(b, n);
 		glm::vec2 chaos = { ofRandomf(), ofRandomf() };
 		chaos = glm::normalize(chaos) * MAX_CHAOS - b.vel;
@@ -163,35 +163,6 @@ glm::vec2 ofApp::avoid_obstacles(boid& b, std::vector<boid*>& n) {
 	}
 
 	return { 0, 0 };
-}
-
-glm::vec2 ofApp::separation_force(boid& b, std::vector<boid*>& n) {
-
-	int count = 0;
-	glm::vec2 sum = { 0, 0 };
-
-	for (auto o : n) {
-		float d = glm::distance(o->pos, b.pos);
-		if (d > 0 && d < BUFFER) {
-			glm::vec2 diff = b.pos - o->pos;
-			sum += diff;
-			count++;
-		}
-	} 
-
-	if (count > 0) {
-		sum /= count;
-		sum *= b.max_speed;
-		if (glm::length(sum) > glm::length(b.max_speed)) {
-			sum = glm::normalize(sum) * b.max_speed;
-		}
-		sum -= b.vel;
-		if (glm::length(sum) > glm::length(b.max_speed)) {
-			sum = glm::normalize(sum) * b.max_speed;
-		}
-	}
-
-	return sum;
 }
 
 //--------------------------------------------------------------
