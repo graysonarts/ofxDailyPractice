@@ -1,9 +1,6 @@
 #include "ofApp.h"
 #include "JzAzBzColor.h"
 
-const int STARTING_BOIDS = 25000;
-const int PALETTE_SIZE = 5;
-
 //--------------------------------------------------------------
 void ofApp::setup() {
 
@@ -11,17 +8,28 @@ void ofApp::setup() {
 	ofEnableAlphaBlending();
 	ofEnableAntiAliasing();
 	ofDisableArbTex();
-	canvas.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
+
+	dust = make_unique<MagicDust>(ofGetWidth(), ofGetHeight());
+
+	channel0.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
+	channel1.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
+
 	output.allocate(ofGetWidth(), ofGetHeight(), OF_IMAGE_COLOR);
 	tree = make_unique<ofxQuadtree>(boundary, 5.);
 
 	char *version = (char*)glGetString(GL_VERSION);
 	ofLog() << "GL " << version;
 
-	if (!shader.load("shader")) {
+	if (!blur_shade.load("shader")) {
 		ofLog() << "Shader failed to load";
 		ofExit();
 	}
+
+	if (!add_shade.load("shader.vert", "add.frag")) {
+		ofLog() << "Shader failed to load";
+		ofExit();
+	}
+
 
 	paused = debug = false;
 	bounds.x = ofGetWidth();
@@ -45,11 +53,11 @@ void ofApp::setup() {
 	for (int i = 0; i < cols; i++) {
 		field[i] = new float[rows];
 	}
-	boids.reserve(STARTING_BOIDS);
+	dust->boids.reserve(STARTING_BOIDS);
 
 	for (int i = 0; i < STARTING_BOIDS; i++) {
 		ofColor c = palette.at((int)floor(ofRandomuf() * palette.size()));
-		boids.push_back(new_boid_at(ofRandomWidth(), ofRandomHeight(), c));
+		dust->boids.push_back(new_boid_at(ofRandomWidth(), ofRandomHeight(), c));
 	}
 
 	ofSetBackgroundAuto(false);
@@ -57,9 +65,9 @@ void ofApp::setup() {
 }
 
 void ofApp::initialize() {
-	//canvas.begin();
+	//channel0.begin();
 	//ofBackground(32);
-	//canvas.end();
+	//channel0.end();
 
 	float j = ofRandomuf();
 	float b = ofRandomuf();
@@ -84,7 +92,7 @@ void ofApp::initialize() {
 		xoff += increment;
 	}
 
-	for (auto& b : boids) {
+	for (auto& b : dust->boids) {
 		b.color = palette.at((int)floor(ofRandomuf() * palette.size()));
 	}
 }
@@ -102,7 +110,7 @@ ofColor ofApp::jab_random(float j, float a, float b) {
 void ofApp::update(){
 	if (paused) return;
 
-	for (auto& b : boids) {
+	for (auto& b : dust->boids) {
 		auto& n = neighbors_of(b);
 
 		glm::vec2 flow = field_force_at(b.pos.x, b.pos.y, glm::length(b.max_speed)) - b.vel;
@@ -110,10 +118,10 @@ void ofApp::update(){
 		glm::vec2 seek = avoid_obstacles(b, n);
 		glm::vec2 chaos = { ofRandomf(), ofRandomf() };
 		chaos = glm::normalize(chaos) * MAX_CHAOS - b.vel;
-		apply_force(b, flow * 0.5 + sep + seek + chaos * 0.25);
+		apply_force(b, flow * 0.25 + sep + seek + chaos * 0.25);
 	}
 
-	for (auto& b : boids) {
+	for (auto& b : dust->boids) {
 		tick(0, b, bounds);
 	}
 
@@ -192,7 +200,7 @@ glm::vec2 ofApp::separation_force(boid& b, std::vector<boid*>& n) {
 
 void ofApp::build_neighbors() {
 	tree->clear();
-	for (auto &b : boids) {
+	for (auto &b : dust->boids) {
 		tree->insert(b.pos, &b);
 	}
 }
@@ -224,34 +232,49 @@ std::vector<boid*> ofApp::neighbors_of(glm::vec2& pos, float radius) {
 
 //--------------------------------------------------------------
 void ofApp::draw() {
-	ofBackground(32);
-
-	canvas.begin();
+	channel0.begin();
 	ofClear(0, 0, 0, 255);
-	ofEnableBlendMode(OF_BLENDMODE_ALPHA);
+	draw_boids();
+	channel0.end();
 
-	ofSetColor(fieldColor, 96);
-	ofSetLineWidth(3.);
-	for (auto& b : boids) {
-		ofSetColor(b.color);
-		ofDrawLine(b.pos, b.previous);
+	channel1.begin();
+	ofClear(0, 0, 0, 255);
+	channel1.end();
+
+	
+	for (int i = 0; i < ITERATIONS; i++) {
+		draw_with(channel0, channel1, blur_shade, HORIZONTAL, i);
+		draw_with(channel1, channel0, blur_shade, VERTICAL, i);
 	}
-	canvas.end();
+	draw_with(channel0, channel1, blur_shade, HORIZONTAL, 1.);
+	draw_with(channel1, channel0, blur_shade, VERTICAL, 1.);
 
+	channel1.begin();
+	draw_boids();
+	channel1.end();
 
-	if (debug) {
-		canvas.draw(0, 0);
-	}
-	else {
-		shader.begin();
-		shader.setUniform3f("resolution", { ofGetWidth(), ofGetHeight(), 0 }); //TODO: optimize
-		shader.setUniformTexture("channel0", canvas.getTexture(), 0);
-		shader.setUniform2f("direction", { 2., 0. }); // TODO: optimize
-		ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
-		shader.end();
-	}
+	add_shade.begin();
+	add_shade.setUniform3f("resolution", { ofGetWidth(), ofGetHeight(), 0 }); //TODO: optimize
+	add_shade.setUniformTexture("channel0", channel0.getTexture(), 0);
+	add_shade.setUniformTexture("channel1", channel1.getTexture(), 1);
+	ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+	add_shade.end();
+}
 
-	//canvas.getTexture().unbind();
+void ofApp::draw_with(ofFbo& source, ofFbo& target, ofShader& s, const glm::vec2& direction, float scale) {
+	target.begin();
+
+	s.begin();
+	s.setUniform3f("resolution", { ofGetWidth(), ofGetHeight(), 0 }); //TODO: optimize
+	s.setUniformTexture("channel0", source.getTexture(), 0);
+	s.setUniform2f("direction", direction * scale);
+	ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+	s.end();
+	target.end();
+}
+
+void ofApp::draw_boids() {
+	dust->draw_boids();
 }
 
 //--------------------------------------------------------------
@@ -259,7 +282,7 @@ void ofApp::keyPressed(int key){
 	switch (key) {
 	case 's':
 		output.clear();
-		canvas.readToPixels(output);
+		channel0.readToPixels(output);
 		ofSaveImage(output, "frame.png", OF_IMAGE_QUALITY_BEST);
 		break;
 	case ' ':
@@ -292,7 +315,7 @@ void ofApp::mouseDragged(int x, int y, int button){
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
 	if (button == 0) {
-		boids.push_back(new_boid_at(x, y, boidColor));
+		dust->boids.push_back(new_boid_at(x, y, boidColor));
 	}
 }
 
@@ -302,7 +325,7 @@ boid ofApp::new_boid_at(float x, float y, ofColor c) {
 		{ 0, 0 },
 		{ 0, 0 },
 		{ 0, 0 },
-		{ 10., 10. },
+		{ 8, 6. },
 		c
 	};
 }

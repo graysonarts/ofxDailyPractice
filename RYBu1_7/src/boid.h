@@ -1,5 +1,6 @@
 #pragma once
 #include "ofMain.h"
+#include "constants.h"
 
 struct boid {
 	glm::vec2 pos;
@@ -15,4 +16,4 @@ struct boid {
 void apply_force(boid& b, glm::vec2& force);
 void tick(const float dt, boid& b, const glm::vec2& boundaries);
 
-const float MAX_FORCE = 10.;
+

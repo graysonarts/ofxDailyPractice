@@ -27,5 +27,5 @@ vec4 blur(sampler2D image, vec2 uv, vec2 resolution, vec2 direction) {
 void main()
 {
     vec2 uv = vec2(gl_FragCoord.xy / resolution.xy);
-    outputColor = blur(channel0, uv, resolution.xy, direction) + 2. * texture2D(channel0, uv);
+    outputColor = blur(channel0, uv, resolution.xy, direction);
 }
