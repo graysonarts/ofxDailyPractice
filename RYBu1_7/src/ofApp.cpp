@@ -31,8 +31,6 @@ void ofApp::setup() {
 
 
 	paused = debug = false;
-	bounds.x = ofGetWidth();
-	bounds.y = ofGetHeight();
 
 	rows = ofGetHeight() / SCALE;
 	cols = ofGetWidth() / SCALE;
@@ -116,11 +114,8 @@ void ofApp::update(){
 		apply_force(b, flow * 0.25 + sep + chaos * 0.25);
 	}
 
-	for (auto& b : dust->boids) {
-		tick(0, b, bounds);
-	}
+	dust->update();
 
-	dust->build_neighbors();
 }
 
 glm::vec2 ofApp::field_force_at(float x, float y, float speed) {

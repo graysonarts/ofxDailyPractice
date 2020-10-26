@@ -1,11 +1,19 @@
 #include "magicdust.h"
 
-MagicDust::MagicDust(int width, int height) : boundary({ width / 2.f, height / 2.f, width / 2.f, height / 2.f}), tree(boundary, 10.) {
+MagicDust::MagicDust(int width, int height) : boundary({ width / 2.f, height / 2.f, width / 2.f, height / 2.f}), bounds(width, height), tree(boundary, 10.) {
 
 }
 
 MagicDust::~MagicDust() {
 
+}
+
+void MagicDust::update() {
+	for (auto& b : boids) {
+		tick(0, b, bounds);
+	}
+
+	build_neighbors();
 }
 
 void MagicDust::draw_boids() {

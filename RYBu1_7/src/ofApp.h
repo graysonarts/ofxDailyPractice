@@ -42,7 +42,6 @@ private:
 	void initialize();
 	glm::vec2 field_force_at(float x, float y, float speed);
 
-	glm::vec2 bounds;
 	boid new_boid_at(float x, float y, ofColor c);
 	void draw_with(ofFbo& source, ofFbo& target, ofShader& shader, const glm::vec2& direction, float scale);
 

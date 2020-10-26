@@ -22,6 +22,7 @@ public:
 
 private:
 	ofRectangle boundary;
+	glm::vec2 bounds;
 	ofxQuadtree tree;
 
 };
