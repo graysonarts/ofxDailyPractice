@@ -8,12 +8,29 @@ MagicDust::~MagicDust() {
 
 }
 
-void MagicDust::update() {
+void MagicDust::update(std::function<glm::vec2(float,float,float)> field_force_at) {
+
+	for (auto& b : boids) {
+		auto& n = neighbors_of(b);
+
+		glm::vec2 flow = field_force_at(b.pos.x, b.pos.y, glm::length(b.max_speed)) - b.vel;
+		glm::vec2 sep = separation(b, n);
+		glm::vec2 chaos = { ofRandomf(), ofRandomf() };
+		chaos = glm::normalize(chaos) * MAX_CHAOS - b.vel;
+		apply_force(b, flow * 0.25 + sep + chaos * 0.25);
+	}
+
 	for (auto& b : boids) {
 		tick(0, b, bounds);
 	}
 
 	build_neighbors();
+}
+
+void MagicDust::set_colors(std::vector<ofColor>& palette) {
+	for (auto& b : boids) {
+		b.color = palette.at((int)floor(ofRandomuf() * palette.size()));
+	}
 }
 
 void MagicDust::draw_boids() {

@@ -86,9 +86,7 @@ void ofApp::initialize() {
 		xoff += increment;
 	}
 
-	for (auto& b : dust->boids) {
-		b.color = palette.at((int)floor(ofRandomuf() * palette.size()));
-	}
+	dust->set_colors(palette);
 }
 
 ofColor ofApp::jab_random(float j, float a, float b) {
@@ -104,17 +102,9 @@ ofColor ofApp::jab_random(float j, float a, float b) {
 void ofApp::update(){
 	if (paused) return;
 
-	for (auto& b : dust->boids) {
-		auto& n = dust->neighbors_of(b);
-
-		glm::vec2 flow = field_force_at(b.pos.x, b.pos.y, glm::length(b.max_speed)) - b.vel;
-		glm::vec2 sep = separation(b, n);
-		glm::vec2 chaos = { ofRandomf(), ofRandomf() };
-		chaos = glm::normalize(chaos) * MAX_CHAOS - b.vel;
-		apply_force(b, flow * 0.25 + sep + chaos * 0.25);
-	}
-
-	dust->update();
+	dust->update([&](float x, float y, float speed) {
+		return field_force_at(x, y, speed);
+	});
 
 }
 

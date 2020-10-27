@@ -10,8 +10,10 @@ public:
 	MagicDust(int width, int height);
 	~MagicDust();
 
-	void update();
+	void update(std::function<glm::vec2(float, float, float)> field_force_at);
 	void draw();
+
+	void set_colors(std::vector<ofColor>& palette);
 
 	// Temporarily public items
 	std::vector<boid> boids; 
