@@ -1,2 +1,4 @@
 ofxGui
+ofxLibRealSense2P
+ofxOpenCv
 ofxQuadtree

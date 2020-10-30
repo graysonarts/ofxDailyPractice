@@ -14,9 +14,13 @@ public:
 	void draw();
 
 	void set_colors(std::vector<ofColor>& palette);
+	void set_target(float x, float y);
+
+	const glm::vec2& get_target() const;
 
 	// Temporarily public items
 	std::vector<boid> boids; 
+
 	void draw_boids();
 	void build_neighbors();
 	std::vector<boid*> neighbors_of(boid& b);
@@ -26,5 +30,6 @@ private:
 	ofRectangle boundary;
 	glm::vec2 bounds;
 	ofxQuadtree tree;
+	glm::vec2 target;
 
 };

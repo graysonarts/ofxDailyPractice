@@ -56,3 +56,7 @@ glm::vec2 separation(boid& b, std::vector<boid*>& n) {
 
 	return sum;
 }
+
+glm::vec2 seek(boid& b, glm::vec2& target) {
+	return glm::normalize(target - b.pos) * b.max_speed - b.vel;
+}

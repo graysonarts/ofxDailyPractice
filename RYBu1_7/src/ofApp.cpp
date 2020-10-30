@@ -1,6 +1,10 @@
 #include "ofApp.h"
 #include "JzAzBzColor.h"
 
+#define RENDER_FLOWS
+#define RENDER_MAGIC
+//#define RENDER_DEPTH
+
 //--------------------------------------------------------------
 void ofApp::setup() {
 
@@ -9,12 +13,21 @@ void ofApp::setup() {
 	ofEnableAntiAliasing();
 	ofDisableArbTex();
 
+	depth_output_width = (float)ofGetWidth() / SCALE;
+	depth_output_height = depth_output_width / DEPTH_ASPECT;
+
+	gui.setup();
+	gui.add(threshold.set("Depth Threshold", 128, 0, 255));
+
+	gui.setPosition(0, 480);
+
 	dust = make_unique<MagicDust>(ofGetWidth(), ofGetHeight());
 
 	channel0.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
 	channel1.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
 
 	output.allocate(ofGetWidth(), ofGetHeight(), OF_IMAGE_COLOR);
+	depth_scaled.allocate(depth_output_width, depth_output_height);
 
 	char *version = (char*)glGetString(GL_VERSION);
 	ofLog() << "GL " << version;
@@ -55,6 +68,12 @@ void ofApp::setup() {
 	}
 
 	ofSetBackgroundAuto(false);
+
+	camera.setupDevice();
+	// TODO: setupFilter - Research
+	camera.enableDepth(DEPTH_WIDTH, DEPTH_HEIGHT, 30, false);  // useArbTex = false
+	camera.startStream();
+
 	initialize();
 }
 
@@ -102,15 +121,58 @@ ofColor ofApp::jab_random(float j, float a, float b) {
 void ofApp::update(){
 	if (paused) return;
 
+	camera.update();
+	if (camera.isFrameNew()) {
+		camera.getDepthTexture()->readToPixels(pixels);
+		c_depth.setFromPixels(pixels);
+		c_depth.convertToGrayscalePlanarImage(depth_image, 0);
+
+		depth_image.contrastStretch();
+		depth_image.blurHeavily();
+		depth_image.dilate();
+		depth_image.erode();
+
+		depth_image.threshold(threshold); // ~TODO: Threshold creates a mask so that we have detail in the foreground depth
+		depth_image.updateTexture();
+
+		depth_scaled.scaleIntoMe(depth_image);
+		update_target_location();
+	}
+
+	ofPixels& depth = depth_scaled.getPixels();
+
 	dust->update([&](float x, float y, float speed) {
-		return field_force_at(x, y, speed);
+		glm::ivec2 coords = field_coord(x, y);
+		glm::vec2 force = field_force_at(coords.x, coords.y, speed);
+		return depth.getColor(coords.x, coords.y).getBrightness() > 128. ?
+			glm::normalize(VERTICAL * speed * 3 - force) * speed : 
+			force;
 	});
 
 }
 
-glm::vec2 ofApp::field_force_at(float x, float y, float speed) {
-	int row = ofClamp((int)floor(y / SCALE), 0, rows - 1);
-	int col = ofClamp((int)floor(x / SCALE), 0, cols - 1);
+void ofApp::update_target_location() {
+	ofPixels& depth = depth_scaled.getPixels();
+	glm::vec3 acc = { 0., 0., 0. };
+	for (int x = 0; x < depth.getWidth(); x++) {
+		for (int y = 0; y < depth.getHeight(); y++) {
+			if (depth.getColor(x, y).getBrightness() > 128) {
+				acc += { (float)x, (float)y, 1. };
+			}
+		}
+	}
+
+	dust->set_target(acc.x / acc.z * SCALE, acc.y / acc.z * SCALE);
+}
+
+glm::ivec2 ofApp::field_coord(float x, float y) {
+	return { ofClamp((int)floor(x / SCALE), 0, cols - 1),
+			 ofClamp((int)floor(y / SCALE), 0, rows - 1) };
+
+}
+
+glm::vec2 ofApp::field_force_at(int col, int row, float speed) {
+
 	float angle = field[col][row];
 
 	glm::vec2 force = { sin(angle), cos(angle) };
@@ -120,6 +182,16 @@ glm::vec2 ofApp::field_force_at(float x, float y, float speed) {
 
 //--------------------------------------------------------------
 void ofApp::draw() {
+
+#ifdef RENDER_DEPTH
+	ofPushMatrix();
+	c_depth.draw(640, 0);
+	depth_image.draw(0, 0);
+	depth_scaled.draw(640, 480);
+	ofPopMatrix();
+#endif // RENDER_DEPTH
+
+#ifdef RENDER_MAGIC
 	channel0.begin();
 	ofClear(0, 0, 0, 255);
 	dust->draw_boids();
@@ -147,6 +219,37 @@ void ofApp::draw() {
 	add_shade.setUniformTexture("channel1", channel1.getTexture(), 1);
 	ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
 	add_shade.end();
+
+#endif // RENDER_MAGIC
+
+#ifdef RENDER_FLOWS
+
+	ofSetLineWidth(3.);
+
+	ofPixels& depth = depth_scaled.getPixels();
+
+	for (int col = 0; col < cols; col++) {
+		for (int row = 0; row < rows; row++) {
+			int x = (col + 0.5) * SCALE;
+			int y = (row + 0.5) * SCALE;
+
+
+			glm::vec2 center = { x, y };
+			ofColor c = depth.getColor(col, row);
+			ofSetColor(fieldColor, c.getBrightness());
+			glm::vec2 bias = c.getBrightness() > 128. ? VERTICAL : HORIZONTAL;
+			glm::vec2 start = field_force_at(col, row, 7.) + bias * 7.;
+			glm::vec2 end = start * -1.;
+			ofDrawLine(start + center, end + center);
+			ofDrawCircle(start + center, 3.);
+		}
+	}
+
+	ofSetColor(neighborColor);
+	ofDrawCircle(dust->get_target(), 10.0);
+#endif // RENDER_FLOWS
+
+	gui.draw();
 }
 
 void ofApp::draw_with(ofFbo& source, ofFbo& target, ofShader& s, const glm::vec2& direction, float scale) {

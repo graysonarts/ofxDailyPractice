@@ -3,6 +3,9 @@
 #include "ofMain.h" 
 #include "constants.h"
 #include "ofxQuadtree.h"
+#include "ofxLibRealSense2P.h"
+#include "ofxOpenCv.h"
+#include "ofxGui.h"
 #include "boid.h"
 #include "magicdust.h"
 
@@ -40,14 +43,26 @@ private:
 	ofColor jab_random(float j, float a, float b);
 
 	void initialize();
-	glm::vec2 field_force_at(float x, float y, float speed);
+	glm::vec2 field_force_at(int col, int row, float speed);
+	glm::ivec2 field_coord(float x, float y);
 
 	boid new_boid_at(float x, float y, ofColor c);
 	void draw_with(ofFbo& source, ofFbo& target, ofShader& shader, const glm::vec2& direction, float scale);
+	void update_target_location();
 
 
 	ofShader blur_shade;
 	ofShader add_shade;
 
 	std::unique_ptr<MagicDust> dust;
+	ofxLibRealSense2P camera;
+	ofPixels pixels;
+	ofxCvColorImage c_depth;
+	ofxCvGrayscaleImage depth_image;
+	ofxCvGrayscaleImage depth_scaled;
+
+	ofxPanel gui;
+	ofParameter<int> threshold;
+	float depth_output_width;
+	float depth_output_height;
 };

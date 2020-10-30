@@ -1,6 +1,6 @@
 #include "magicdust.h"
 
-MagicDust::MagicDust(int width, int height) : boundary({ width / 2.f, height / 2.f, width / 2.f, height / 2.f}), bounds(width, height), tree(boundary, 10.) {
+MagicDust::MagicDust(int width, int height) : boundary({ width / 2.f, height / 2.f, width / 2.f, height / 2.f }), bounds(width, height), tree(boundary, 10.), target({ width / 2., height / 2. }) {
 
 }
 
@@ -13,11 +13,12 @@ void MagicDust::update(std::function<glm::vec2(float,float,float)> field_force_a
 	for (auto& b : boids) {
 		auto& n = neighbors_of(b);
 
+		glm::vec2 seeking = seek(b, target);
 		glm::vec2 flow = field_force_at(b.pos.x, b.pos.y, glm::length(b.max_speed)) - b.vel;
 		glm::vec2 sep = separation(b, n);
 		glm::vec2 chaos = { ofRandomf(), ofRandomf() };
 		chaos = glm::normalize(chaos) * MAX_CHAOS - b.vel;
-		apply_force(b, flow * 0.25 + sep + chaos * 0.25);
+		apply_force(b, seeking + flow * 0.25 + sep + chaos * 0.25);
 	}
 
 	for (auto& b : boids) {
@@ -68,4 +69,13 @@ std::vector<boid*> MagicDust::neighbors_of(glm::vec2& pos, float radius) {
 
 std::vector<boid*> MagicDust::neighbors_of(boid& b) {
 	return neighbors_of(b.pos, NEIGHBORHOOD);
+}
+
+void MagicDust::set_target(float x, float y) {
+	target.x = x;
+	target.y = y;
+}
+
+const glm::vec2& MagicDust::get_target() const {
+	return target;
 }
