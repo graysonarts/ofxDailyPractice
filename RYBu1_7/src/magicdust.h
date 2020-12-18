@@ -10,7 +10,7 @@ public:
 	MagicDust(int width, int height);
 	~MagicDust();
 
-	void update(std::function<glm::vec2(float, float, float)> field_force_at);
+	void update(std::function<glm::vec2(float, float, float)> field_force_at, std::function<glm::ivec2(float, float)> coord, ofPixels& depth);
 	void draw();
 
 	void set_colors(std::vector<ofColor>& palette);

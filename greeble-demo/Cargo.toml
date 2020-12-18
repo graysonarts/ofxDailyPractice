@@ -1,0 +1,26 @@
+[package]
+name = "greeble-demo"
+version = "0.1.0"
+authors = ["Grayson Hay <me@russellhay.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+serde_json = "1"
+
+[dependencies.sdl2]
+version = "*"
+features = [ "ttf", "static-link", "bundled" ]
+
+[dependencies.serde]
+version = "1"
+features = [ "derive" ]
+
+[package.metadata.vcpkg]
+dependencies = ["sdl2"]
+
+# dependencies required when building examples and tests for this crate
+dev-dependencies = ["sdl2", "sdl2-image[libjpeg-turbo,tiff,libwebp]", "sdl2-ttf", "sdl2-gfx", "sdl2-mixer"]
+git = "https://github.com/microsoft/vcpkg"
+rev = "a0518036077baa4"

@@ -1,7 +1,7 @@
 #include "ofApp.h"
 #include "JzAzBzColor.h"
 
-#define RENDER_FLOWS
+//#define RENDER_FLOWS
 #define RENDER_MAGIC
 //#define RENDER_DEPTH
 
@@ -144,10 +144,10 @@ void ofApp::update(){
 	dust->update([&](float x, float y, float speed) {
 		glm::ivec2 coords = field_coord(x, y);
 		glm::vec2 force = field_force_at(coords.x, coords.y, speed);
-		return depth.getColor(coords.x, coords.y).getBrightness() > 128. ?
-			glm::normalize(VERTICAL * speed * 3 - force) * speed : 
-			force;
-	});
+		return force;
+		}, [&](float x, float y) {
+			return field_coord(x, y);
+		}, depth);
 
 }
 
@@ -161,6 +161,8 @@ void ofApp::update_target_location() {
 			}
 		}
 	}
+
+	if (acc.z <= 1) return;
 
 	dust->set_target(acc.x / acc.z * SCALE, acc.y / acc.z * SCALE);
 }
@@ -182,14 +184,6 @@ glm::vec2 ofApp::field_force_at(int col, int row, float speed) {
 
 //--------------------------------------------------------------
 void ofApp::draw() {
-
-#ifdef RENDER_DEPTH
-	ofPushMatrix();
-	c_depth.draw(640, 0);
-	depth_image.draw(0, 0);
-	depth_scaled.draw(640, 480);
-	ofPopMatrix();
-#endif // RENDER_DEPTH
 
 #ifdef RENDER_MAGIC
 	channel0.begin();
@@ -222,6 +216,14 @@ void ofApp::draw() {
 
 #endif // RENDER_MAGIC
 
+#ifdef RENDER_DEPTH
+	ofPushMatrix();
+	c_depth.draw(640, 0);
+	depth_image.draw(0, 0);
+	depth_scaled.draw(640, 480);
+	ofPopMatrix();
+#endif // RENDER_DEPTH
+
 #ifdef RENDER_FLOWS
 
 	ofSetLineWidth(3.);
@@ -244,10 +246,10 @@ void ofApp::draw() {
 			ofDrawCircle(start + center, 3.);
 		}
 	}
+#endif // RENDER_FLOWS
 
 	ofSetColor(neighborColor);
 	ofDrawCircle(dust->get_target(), 10.0);
-#endif // RENDER_FLOWS
 
 	gui.draw();
 }
@@ -312,7 +314,7 @@ boid ofApp::new_boid_at(float x, float y, ofColor c) {
 		{ 0, 0 },
 		{ 0, 0 },
 		{ 0, 0 },
-		{ 8, 6. },
+		{ 15, 15. },
 		c
 	};
 }

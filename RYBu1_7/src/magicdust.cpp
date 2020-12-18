@@ -8,7 +8,7 @@ MagicDust::~MagicDust() {
 
 }
 
-void MagicDust::update(std::function<glm::vec2(float,float,float)> field_force_at) {
+void MagicDust::update(std::function<glm::vec2(float,float,float)> field_force_at, std::function<glm::ivec2(float, float)> coord, ofPixels& depth) {
 
 	for (auto& b : boids) {
 		auto& n = neighbors_of(b);
@@ -18,7 +18,10 @@ void MagicDust::update(std::function<glm::vec2(float,float,float)> field_force_a
 		glm::vec2 sep = separation(b, n);
 		glm::vec2 chaos = { ofRandomf(), ofRandomf() };
 		chaos = glm::normalize(chaos) * MAX_CHAOS - b.vel;
-		apply_force(b, seeking + flow * 0.25 + sep + chaos * 0.25);
+		glm::ivec2 c = coord(b.pos.x, b.pos.y);
+		float seek_scale = depth.getColor(c.x, c.y).getBrightness() > 128 ? -1.6 : 1;
+		//apply_force(b, seeking + flow + sep + chaos * 0.25);
+		apply_force(b, seeking * seek_scale + sep + flow * 0.25);
 	}
 
 	for (auto& b : boids) {
